@@ -1,0 +1,6 @@
+{
+  "name": "Myanmar Food",
+  "description": "Minimalist online food ordering app tailored for Myanmar with bilingual Burmese and English support, instant frictionless checkout, township shipping picker, real-time order tracking, and push status notifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

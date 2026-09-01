@@ -1,0 +1,135 @@
+package com.example.notification
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import com.example.MainActivity
+import com.example.model.Language
+import com.example.model.OrderStatus
+
+object OrderNotificationHelper {
+    const val CHANNEL_ID = "myanmar_food_orders_channel"
+    private const val CHANNEL_NAME = "Myanmar Food Orders"
+    private const val CHANNEL_DESC = "Real-time updates for your Myanmar food delivery orders"
+
+    fun createNotificationChannel(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                description = CHANNEL_DESC
+                enableVibration(true)
+                vibrationPattern = longArrayOf(0, 300, 200, 300)
+            }
+            val notificationManager: NotificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    fun showOrderStatusNotification(
+        context: Context,
+        orderId: String,
+        status: OrderStatus,
+        lang: Language,
+        itemsSummary: String
+    ) {
+        createNotificationChannel(context)
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("EXTRA_ORDER_ID", orderId)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            orderId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val title = when (status) {
+            OrderStatus.PLACED -> if (lang == Language.BURMESE) "အော်ဒါ #$orderId လက်ခံရရှိပါပြီ 🎉" else "Order #$orderId Confirmed 🎉"
+            OrderStatus.PREPARING -> if (lang == Language.BURMESE) "မီးဖိုချောင်တွင် စတင်ချက်ပြုတ်နေပါပြီ 🍳" else "Kitchen is Cooking your food 🍳"
+            OrderStatus.OUT_FOR_DELIVERY -> if (lang == Language.BURMESE) "ပို့ဆောင်သူ ထွက်ခွာလာပါပြီ 🛵" else "Rider is on the way 🛵"
+            OrderStatus.DELIVERED -> if (lang == Language.BURMESE) "အစားအစာ ရောက်ရှိပါပြီ! စားသုံးပါ 😋" else "Food Delivered! Enjoy your meal 😋"
+            OrderStatus.CANCELLED -> if (lang == Language.BURMESE) "အော်ဒါ #$orderId ပယ်ဖျက်ပြီးပါပြီ" else "Order #$orderId Cancelled"
+        }
+
+        val contentText = "${status.description(lang)} • $itemsSummary"
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle(title)
+            .setContentText(contentText)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setVibrate(longArrayOf(0, 300, 200, 300))
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context).notify(orderId.hashCode(), notification)
+        } catch (e: SecurityException) {
+            // Notification permission not granted yet on Android 13+
+        }
+    }
+
+    fun showPaymentReminderNotification(
+        context: Context,
+        orderId: String,
+        amountMMK: Int,
+        lang: Language,
+        remainingMinutes: Int
+    ) {
+        createNotificationChannel(context)
+
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("EXTRA_ORDER_ID", orderId)
+            putExtra("EXTRA_OPEN_KBZ_PAY", true)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            ("PAY_" + orderId).hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val title = if (lang == Language.BURMESE) {
+            "⏰ KBZPay ငွေပေးချေရန် သတိပေးချက် ($remainingMinutes မိနစ် ကျန်)"
+        } else {
+            "⏰ KBZPay Payment Reminder ($remainingMinutes min remaining)"
+        }
+
+        val amountStr = if (lang == Language.BURMESE) "$amountMMK ကျပ်" else "$amountMMK MMK"
+        val contentText = if (lang == Language.BURMESE) {
+            "အော်ဒါ #$orderId အတွက် KBZPay ဖြင့် $amountStr ကို လွှဲပေးပါရန်။ အကောင့်: ဒေါ်ပွင့်စံ (09-789456123)"
+        } else {
+            "Please complete your KBZPay payment of $amountStr for Order #$orderId. Acc: Daw Pwint San (09-789456123)"
+        }
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_dialog_alert)
+            .setContentTitle(title)
+            .setContentText(contentText)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setVibrate(longArrayOf(0, 400, 200, 400))
+            .build()
+
+        try {
+            NotificationManagerCompat.from(context).notify(("PAY_" + orderId).hashCode(), notification)
+        } catch (e: SecurityException) {
+            // Notification permission not granted yet
+        }
+    }
+}
