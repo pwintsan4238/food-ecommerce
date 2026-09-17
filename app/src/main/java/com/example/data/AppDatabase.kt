@@ -6,8 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [OrderEntity::class, UserProfileEntity::class],
-    version = 1,
+    entities = [
+        OrderEntity::class,
+        UserProfileEntity::class,
+        ProductEntity::class,
+        UserAccountEntity::class,
+        ReviewEntity::class,
+        CustomerMessageEntity::class,
+        BusinessSettingsEntity::class,
+        CategoryEntity::class,
+        BrandEntity::class
+    ],
+    version = 7,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -23,7 +33,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "myanmar_food_orders.db"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

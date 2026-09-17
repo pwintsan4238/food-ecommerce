@@ -9,7 +9,7 @@ enum class OrderStatus(val stepIndex: Int) {
 
     fun title(lang: Language): String = when (this) {
         PLACED -> if (lang == Language.BURMESE) "အော်ဒါ လက်ခံရရှိပါပြီ" else "Order Received"
-        PREPARING -> if (lang == Language.BURMESE) "မီးဖိုချောင်တွင် ပြင်ဆင်နေပါသည်" else "Kitchen Preparing"
+        PREPARING -> if (lang == Language.BURMESE) "အော်ဒါ ပြင်ဆင်နေပါသည်" else "Order Preparing"
         OUT_FOR_DELIVERY -> if (lang == Language.BURMESE) "ပို့ဆောင်သူ လာနေပါပြီ" else "Rider on the Way"
         DELIVERED -> if (lang == Language.BURMESE) "ပို့ဆောင်ပြီးစီးပါပြီ" else "Delivered Successfully"
         CANCELLED -> if (lang == Language.BURMESE) "အော်ဒါ ပယ်ဖျက်လိုက်ပါပြီ" else "Order Cancelled"

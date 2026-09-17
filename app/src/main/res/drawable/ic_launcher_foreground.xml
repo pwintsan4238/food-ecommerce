@@ -4,50 +4,88 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Food Bowl Base -->
+
+    <!-- Group centered in 66dp safe zone (21 to 87) -->
+    <!-- Market Stall Awning (Turquoise and Yellow Stripes) -->
+    <!-- Awning Base Curve / Scallops -->
+    <!-- Turquoise Stripe 1 -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M32,32 L39,32 L39,43 C37.5,43 36,44 35.5,44.5 C34.5,44 33,43 32,43 Z" />
+    <!-- Yellow Stripe 2 -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M39,32 L46,32 L46,43 C44.5,43 43.5,44 42.5,44.5 C41.5,44 40.5,43 39,43 Z" />
+    <!-- Turquoise Stripe 3 -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M46,32 L54,32 L54,43 C52.5,43 51.5,44 50,44.5 C48.5,44 47.5,43 46,43 Z" />
+    <!-- Yellow Stripe 4 -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M54,32 L62,32 L62,43 C60.5,43 59.5,44 58,44.5 C56.5,44 55.5,43 54,43 Z" />
+    <!-- Turquoise Stripe 5 -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M62,32 L69,32 L69,43 C67.5,43 66.5,44 65.5,44.5 C64.5,44 63.5,43 62,43 Z" />
+    <!-- Yellow Stripe 6 -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M69,32 L76,32 L76,43 C75,43 73.5,44 72.5,44.5 C72,44 70.5,43 69,43 Z" />
+
+    <!-- Center Food / Seafood Platter / Bowl in Pure White & Gold -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M32,54 C32,69.5 41.8,78 54,78 C66.2,78 76,69.5 76,54 L32,54 Z" />
-    <!-- Bowl Stand -->
+        android:pathData="M38,55 C38,65 45,71 54,71 C63,71 70,65 70,55 L38,55 Z" />
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M46,78 L62,78 L64,83 L44,83 Z" />
-    <!-- Bowl Rim Highlight -->
-    <path
-        android:fillColor="#FFE082"
-        android:pathData="M30,51 C30,49.5 32,48 54,48 C76,48 78,49.5 78,51 C78,52.5 76,54 54,54 C32,54 30,52.5 30,51 Z" />
-    <!-- Rising Steam 1 -->
+        android:fillColor="#FFD54F"
+        android:pathData="M36,53 C36,51.5 40,50 54,50 C68,50 72,51.5 72,53 C72,54.5 68,56 54,56 C40,56 36,54.5 36,53 Z" />
+    <!-- Rising Steam / Cloud (တိမ်) representation -->
     <path
         android:fillColor="#00000000"
         android:strokeColor="#FFFFFF"
-        android:strokeWidth="3"
-        android:strokeLineCap="round"
-        android:pathData="M44,43 C42,39 46,35 44,30" />
-    <!-- Rising Steam 2 -->
-    <path
-        android:fillColor="#00000000"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="3.5"
-        android:strokeLineCap="round"
-        android:pathData="M54,42 C51,37 57,33 54,26" />
-    <!-- Rising Steam 3 -->
-    <path
-        android:fillColor="#00000000"
-        android:strokeColor="#FFFFFF"
-        android:strokeWidth="3"
-        android:strokeLineCap="round"
-        android:pathData="M64,43 C62,39 66,35 64,30" />
-    <!-- Chopsticks / Fork Accent -->
-    <path
-        android:fillColor="#00000000"
-        android:strokeColor="#FFF9C4"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
-        android:pathData="M66,28 L78,50" />
+        android:pathData="M47,48 C45,45 49,42 47,38" />
     <path
         android:fillColor="#00000000"
-        android:strokeColor="#FFF9C4"
+        android:strokeColor="#FFD54F"
         android:strokeWidth="2.5"
         android:strokeLineCap="round"
-        android:pathData="M70,27 L82,49" />
+        android:pathData="M54,48 C52,44 56,41 54,37" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M61,48 C59,45 63,42 61,38" />
+
+    <!-- Turquoise Delivery Cart Platform at Bottom -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M32,75 L76,75 C77,75 78,76 78,77 C78,78 77,79 76,79 L32,79 C31,79 30,78 30,77 C30,76 31,75 32,75 Z" />
+
+    <!-- Food Cart Wheels in Turquoise with Center Hub -->
+    <!-- Left Wheel Outer -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38B6FF"
+        android:strokeWidth="2"
+        android:pathData="M40,84 A5,5 0 1,1 40,84.01" />
+    <!-- Left Wheel Hub -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M40,84 A1.5,1.5 0 1,1 40,84.01" />
+
+    <!-- Right Wheel Outer -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38B6FF"
+        android:strokeWidth="2"
+        android:pathData="M68,84 A5,5 0 1,1 68,84.01" />
+    <!-- Right Wheel Hub -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M68,84 A1.5,1.5 0 1,1 68,84.01" />
+
 </vector>

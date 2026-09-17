@@ -2,11 +2,16 @@ package com.example.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Red & White Light Theme Palette
-val WhiteThemePrimary = Color(0xFFDC2626)         // Vibrant Myanmar Crimson Red
+// Taim Ta Man (တိမ်တမန်) Brand Identity Colors (Rich Red, Golden Yellow, Turquoise)
+val BrandLogoRed = Color(0xFFD32042)             // Authentic Taim Ta Man Crimson Red (NOT orange)
+val BrandLogoYellow = Color(0xFFFFD54F)          // Brand Lettering & Awning Gold
+val BrandLogoTurquoise = Color(0xFF38B6FF)       // Brand Food Cart & Awning Cyan
+
+// Red & White Light Theme Palette (Clean, Modern, Food-Grade)
+val WhiteThemePrimary = Color(0xFFD32042)         // Taim Ta Man Crimson Red
 val WhiteThemeOnPrimary = Color(0xFFFFFFFF)       // Crisp Pure White
-val WhiteThemePrimaryContainer = Color(0xFFFEE2E2) // Soft subtle red container
-val WhiteThemeOnPrimaryContainer = Color(0xFF991B1B) // Deep red text
+val WhiteThemePrimaryContainer = Color(0xFFFFE7EB) // Soft subtle rose/red container
+val WhiteThemeOnPrimaryContainer = Color(0xFF880E26) // Deep crimson text
 
 val WhiteThemeSecondary = Color(0xFF475569)       // Slate gray
 val WhiteThemeOnSecondary = Color(0xFFFFFFFF)

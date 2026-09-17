@@ -18,6 +18,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Login
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
@@ -25,13 +28,17 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Shield
+import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
@@ -53,6 +60,7 @@ import com.example.model.Language
 import com.example.model.MyanmarTownship
 import com.example.model.Strings
 import com.example.ui.components.LanguageToggle
+import com.example.ui.components.TaimTaManBrandLogo
 
 @Composable
 fun CustomerInfoScreen(
@@ -67,9 +75,16 @@ fun CustomerInfoScreen(
     onAddressNoteChange: (String) -> Unit,
     onLanguageToggle: () -> Unit,
     onSaveProfile: () -> Unit,
+    onSwitchAccount: () -> Unit = {},
+    onLogout: () -> Unit = {},
+    onOpenAuth: () -> Unit = {},
+    isAdmin: Boolean = false,
+    onAdminBack: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     var savedFeedback by remember { mutableStateOf(false) }
+    var showLogoutDialog by remember { mutableStateOf(false) }
+    val isGuest = customerName.isBlank() && customerPhone.isBlank()
 
     LazyColumn(
         modifier = modifier
@@ -86,6 +101,27 @@ fun CustomerInfoScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (isAdmin) {
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .clickable { onAdminBack() }
+                                .testTag("admin_profile_back_button")
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                     Icon(
                         imageVector = Icons.Default.Person,
                         contentDescription = null,
@@ -105,6 +141,55 @@ fun CustomerInfoScreen(
                     currentLanguage = currentLanguage,
                     onLanguageToggle = onLanguageToggle
                 )
+            }
+        }
+
+        // Official Brand Identity Card
+        item {
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant
+                ),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TaimTaManBrandLogo(
+                        size = 84.dp,
+                        showSubtext = false,
+                        modifier = Modifier.testTag("profile_brand_logo")
+                    )
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Column {
+                        Text(
+                            text = "တိမ်တမန်",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Black,
+                            fontSize = 18.sp,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                        Text(
+                            text = if (currentLanguage == Language.BURMESE) "ရခိုင်အစားအစာနှင့်ပင်လယ်စာ အိမ်အရောက်ပို့ဆောင်ရေးလုပ်ငန်း" else "Rakhine Food & Seafood Delivery Service",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 10.5.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = if (currentLanguage == Language.BURMESE) "ဒေါ်ပွင့်စံ မန်နေဂျာ (ဖုန်း: 09-789 456 123)" else "Manager: Daw Pwint San (09-789 456 123)",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
             }
         }
 
@@ -327,7 +412,7 @@ fun CustomerInfoScreen(
                     }
                     Text(
                         text = if (currentLanguage == Language.BURMESE) "အော်ဒါ အခြေအနေ ပြောင်းလဲမှုများကို သင့်ဖုန်း အသိပေးချက် (Push Notification) ဖြင့် အချိန်နှင့်တပြေးညီ ပေးပို့သွားပါမည်။"
-                        else "Real-time push status updates are enabled for Kitchen cooking, Rider dispatch, and Delivery.",
+                        else "Real-time push status updates are enabled for Order preparing, Rider dispatch, and Delivery.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -335,8 +420,128 @@ fun CustomerInfoScreen(
             }
         }
 
+        // Account Switch & Logout Management Card
+        item {
+            Card(
+                shape = RoundedCornerShape(16.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        text = if (currentLanguage == Language.BURMESE) "အကောင့်စီမံခန့်ခွဲမှု" else "ACCOUNT MANAGEMENT",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    if (isGuest) {
+                        Button(
+                            onClick = onOpenAuth,
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("profile_login_btn")
+                        ) {
+                            Icon(imageVector = Icons.AutoMirrored.Filled.Login, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = Strings.loginOrSignUp(currentLanguage),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    } else {
+                        OutlinedButton(
+                            onClick = onSwitchAccount,
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("profile_switch_account_btn")
+                        ) {
+                            Icon(imageVector = Icons.Default.SwapHoriz, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = Strings.switchAccount(currentLanguage),
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+
+                        Button(
+                            onClick = { showLogoutDialog = true },
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("profile_logout_btn")
+                        ) {
+                            Icon(imageVector = Icons.AutoMirrored.Filled.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = Strings.logout(currentLanguage),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
         item {
             Spacer(modifier = Modifier.height(24.dp))
         }
+    }
+
+    if (showLogoutDialog) {
+        AlertDialog(
+            onDismissRequest = { showLogoutDialog = false },
+            icon = {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Logout,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            title = {
+                Text(
+                    text = Strings.logoutConfirmTitle(currentLanguage),
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = Strings.logoutConfirmDesc(currentLanguage),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showLogoutDialog = false
+                        onLogout()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
+                    modifier = Modifier.testTag("dialog_profile_confirm_logout")
+                ) {
+                    Text(text = Strings.logout(currentLanguage), fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                OutlinedButton(onClick = { showLogoutDialog = false }) {
+                    Text(text = Strings.cancel(currentLanguage))
+                }
+            }
+        )
     }
 }

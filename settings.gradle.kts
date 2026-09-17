@@ -22,6 +22,6 @@ dependencyResolutionManagement {
   }
 }
 
-rootProject.name = "Myanmar Food"
+rootProject.name = "တိမ်တမန်"
 
 include(":app")

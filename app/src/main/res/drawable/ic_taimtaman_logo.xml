@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Circle Background in Authentic Brand Crimson Red (#D32042) -->
+    <path
+        android:fillColor="#D32042"
+        android:pathData="M100,10 A90,90 0 1,0 100,190 A90,90 0 1,0 100,10 Z" />
+
+    <!-- Striped Awning Top (Turquoise #38B6FF and Yellow #FFD54F) -->
+    <!-- Stripe 1: Turquoise -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M65,48 L76,48 L76,64 C73,64 71,65.5 70.5,66.5 C69,65.5 67,64 65,64 Z" />
+    <!-- Stripe 2: Yellow -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M76,48 L88,48 L88,64 C85,64 83,65.5 82,66.5 C81,65.5 79,64 76,64 Z" />
+    <!-- Stripe 3: Turquoise -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M88,48 L100,48 L100,64 C97,64 95,65.5 94,66.5 C93,65.5 91,64 88,64 Z" />
+    <!-- Stripe 4: Yellow -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M100,48 L112,48 L112,64 C109,64 107,65.5 106,66.5 C105,65.5 103,64 100,64 Z" />
+    <!-- Stripe 5: Turquoise -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M112,48 L124,48 L124,64 C121,64 119,65.5 118,66.5 C117,65.5 115,64 112,64 Z" />
+    <!-- Stripe 6: Yellow -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M124,48 L135,48 L135,64 C133,64 131,65.5 130,66.5 C129,65.5 127,64 124,64 Z" />
+
+    <!-- Awning Shadow / Depth Line -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#B71C1C"
+        android:strokeWidth="1.5"
+        android:pathData="M65,48 L135,48" />
+
+    <!-- Center Food Cart Platform (Turquoise #38B6FF) -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M65,133 L135,133 C137,133 138,134.5 138,136.5 C138,138.5 137,140 135,140 L65,140 C63,140 62,138.5 62,136.5 C62,134.5 63,133 65,133 Z" />
+
+    <!-- Left Wheel Outer Ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38B6FF"
+        android:strokeWidth="3.5"
+        android:pathData="M78,150 A10,10 0 1,1 78,150.01" />
+    <!-- Left Wheel Inner Hub -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M78,150 A3,3 0 1,1 78,150.01" />
+
+    <!-- Right Wheel Outer Ring -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#38B6FF"
+        android:strokeWidth="3.5"
+        android:pathData="M122,150 A10,10 0 1,1 122,150.01" />
+    <!-- Right Wheel Inner Hub -->
+    <path
+        android:fillColor="#38B6FF"
+        android:pathData="M122,150 A3,3 0 1,1 122,150.01" />
+
+    <!-- Golden Brand Star/Food Motifs in Center -->
+    <path
+        android:fillColor="#FFD54F"
+        android:pathData="M98,85 C98,82 102,82 102,85 C105,85 105,89 102,89 C102,92 98,92 98,89 C95,89 95,85 98,85 Z" />
+
+</vector>

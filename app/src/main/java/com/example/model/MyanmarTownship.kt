@@ -1,5 +1,75 @@
 package com.example.model
 
+enum class DeliveryType {
+    STANDARD,
+    EXPRESS,
+    PICKUP
+}
+
+data class DeliveryPartner(
+    val id: String = java.util.UUID.randomUUID().toString(),
+    val name: String,
+    val type: String = "IN_HOUSE", // "IN_HOUSE" or "THIRD_PARTY"
+    val contactPhone: String = "",
+    val isEnabled: Boolean = true,
+    val estimatedDeliveryTime: String = "25-35 mins",
+    val note: String = ""
+)
+
+data class LogisticsConfig(
+    val standardDeliveryFeeMMK: Int = 2000,
+    val minOrderAmountMMK: Int = 5000,
+    val freeDeliveryEnabled: Boolean = true,
+    val freeDeliveryThresholdMMK: Int = 50000,
+    val expressDeliveryEnabled: Boolean = true,
+    val expressDeliveryFeeMMK: Int = 1500, // extra rush fee
+    val expressDeliveryMinutes: Int = 25,
+    val selfPickupEnabled: Boolean = true,
+    val coldChainPackagingFeeMMK: Int = 0,
+    val coldChainPackagingEnabled: Boolean = true,
+    val defaultPrepTimeMinutes: Int = 20,
+    val deliveryOperatingHours: String = "8:30 AM - 9:00 PM",
+    val sameDayCutoffTime: String = "8:00 PM",
+    val deliveryPartners: List<DeliveryPartner> = listOf(
+        DeliveryPartner(
+            id = "in_house_fleet",
+            name = "Taim Ta Man Express Fleet",
+            type = "IN_HOUSE",
+            contactPhone = "09450012345",
+            isEnabled = true,
+            estimatedDeliveryTime = "25-35 mins",
+            note = "Dedicated cold-chain insulated seafood delivery riders"
+        ),
+        DeliveryPartner(
+            id = "yangon_d2d",
+            name = "Yangon Door2Door",
+            type = "THIRD_PARTY",
+            contactPhone = "09977889900",
+            isEnabled = true,
+            estimatedDeliveryTime = "35-50 mins",
+            note = "On-demand partner delivery fleet for rush hours"
+        ),
+        DeliveryPartner(
+            id = "grab_express",
+            name = "GrabExpress Instant",
+            type = "THIRD_PARTY",
+            contactPhone = "09255667788",
+            isEnabled = false,
+            estimatedDeliveryTime = "20-35 mins",
+            note = "Direct point-to-point courier service"
+        ),
+        DeliveryPartner(
+            id = "royal_express",
+            name = "Royal Express (Inter-City)",
+            type = "THIRD_PARTY",
+            contactPhone = "09799887766",
+            isEnabled = true,
+            estimatedDeliveryTime = "Same Day / Next Morning",
+            note = "Highway refrigerated bus/cargo parcel delivery for Mandalay & Naypyidaw"
+        )
+    )
+)
+
 data class MyanmarTownship(
     val id: String,
     val nameEn: String,
@@ -7,8 +77,12 @@ data class MyanmarTownship(
     val regionEn: String,
     val regionMy: String,
     val deliveryFeeMMK: Int,
-    val estimatedMinutes: Int
-)
+    val estimatedMinutes: Int,
+    val isEnabled: Boolean = true
+) {
+    fun name(lang: Language): String = if (lang == Language.BURMESE) nameMy else nameEn
+    fun region(lang: Language): String = if (lang == Language.BURMESE) regionMy else regionEn
+}
 
 object MyanmarTownshipsData {
     val allTownships = listOf(

@@ -56,15 +56,20 @@ fun MyanmarTownshipPickerBottomSheet(
     currentLanguage: Language,
     onTownshipSelected: (MyanmarTownship) -> Unit,
     onDismiss: () -> Unit,
+    townships: List<MyanmarTownship> = MyanmarTownshipsData.allTownships,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
-    val filteredTownships = remember(searchQuery) {
+    val activeTownships = remember(townships) {
+        townships.filter { it.isEnabled }
+    }
+
+    val filteredTownships = remember(searchQuery, activeTownships) {
         if (searchQuery.isBlank()) {
-            MyanmarTownshipsData.allTownships
+            activeTownships
         } else {
-            MyanmarTownshipsData.allTownships.filter {
+            activeTownships.filter {
                 it.nameEn.contains(searchQuery, ignoreCase = true) ||
                 it.nameMy.contains(searchQuery, ignoreCase = true) ||
                 it.regionEn.contains(searchQuery, ignoreCase = true) ||

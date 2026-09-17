@@ -7,48 +7,43 @@ enum class Language(val code: String, val displayName: String, val nativeName: S
 
 object Strings {
     fun appTitle(lang: Language): String = when (lang) {
-        Language.BURMESE -> "မြန်မာအစားအစာ အော်ဒါ"
-        Language.ENGLISH -> "Myanmar Food Order"
+        Language.BURMESE -> "တိမ်တမန်"
+        Language.ENGLISH -> "Taim Ta Man"
     }
 
     fun appSubtitle(lang: Language): String = when (lang) {
-        Language.BURMESE -> "အရသာရှိသော အစားအစာများကို လျင်မြန်စွာ မှာယူလိုက်ပါ"
-        Language.ENGLISH -> "Delicious Myanmar bites delivered fast to your door"
+        Language.BURMESE -> "ရခိုင်အစားအစာနှင့်ပင်လယ်စာ အိမ်အရောက်ပို့ဆောင်ရေး"
+        Language.ENGLISH -> "Rakhine Food & Seafood Delivery Service"
     }
 
     fun searchPlaceholder(lang: Language): String = when (lang) {
-        Language.BURMESE -> "အစားအစာ သို့မဟုတ် ဟင်းလျာ ရှာဖွေပါ..."
-        Language.ENGLISH -> "Search food, noodles, curries..."
+        Language.BURMESE -> "ပင်လယ်စာများ (ငါး၊ ပုစွန်၊ ကဏန်း၊ ရေဘဝဲ) ရှာဖွေပါ..."
+        Language.ENGLISH -> "Search seafood (fish, prawn, crab, lobster, squid)..."
     }
 
-    fun categoryAll(lang: Language): String = when (lang) {
-        Language.BURMESE -> "အားလုံး"
-        Language.ENGLISH -> "All"
+    fun browseBySeafoodType(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပင်လယ်စာအမျိုးအစားအလိုက် ဝယ်ယူရန်"
+        Language.ENGLISH -> "Shop by Seafood Type"
     }
 
-    fun categoryNoodles(lang: Language): String = when (lang) {
-        Language.BURMESE -> "ခေါက်ဆွဲ/မုန့်ဟင်းခါး"
-        Language.ENGLISH -> "Noodles & Soups"
+    fun browseByPrepStyle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပြင်ဆင်ပြီးပုံစံအလိုက် ဝယ်ယူရန်"
+        Language.ENGLISH -> "Shop by Preparation Style"
     }
 
-    fun categoryRice(lang: Language): String = when (lang) {
-        Language.BURMESE -> "ထမင်းနှင့်ဟင်း"
-        Language.ENGLISH -> "Rice & Curries"
+    fun browseByOccasion(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စားသုံးမည့်အချိန်အခါအလိုက်"
+        Language.ENGLISH -> "Shop by Occasion"
     }
 
-    fun categorySalads(lang: Language): String = when (lang) {
-        Language.BURMESE -> "အသုပ်နှင့်အကြော်"
-        Language.ENGLISH -> "Salads & Snacks"
-    }
-
-    fun categoryDrinks(lang: Language): String = when (lang) {
-        Language.BURMESE -> "အချိုရည်နှင့်လက်ဖက်ရည်"
-        Language.ENGLISH -> "Drinks & Tea"
+    fun browseByPrice(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဈေးနှုန်းအလိုက် ဝယ်ယူရန်"
+        Language.ENGLISH -> "Shop by Price Range"
     }
 
     fun popularDishes(lang: Language): String = when (lang) {
-        Language.BURMESE -> "လူကြိုက်အများဆုံး အစားအစာများ"
-        Language.ENGLISH -> "Popular Myanmar Favorites"
+        Language.BURMESE -> "လတ်ဆတ်သော ပင်လယ်စာများ"
+        Language.ENGLISH -> "Fresh Coastal Seafood"
     }
 
     fun addToCart(lang: Language): String = when (lang) {
@@ -193,7 +188,7 @@ object Strings {
 
     fun orderPlacedDesc(lang: Language): String = when (lang) {
         Language.BURMESE -> "ဆိုင်မှ သင့်အော်ဒါကို စတင်ပြင်ဆင်နေပါပြီ။ အခြေအနေများကို အချိန်နှင့်တပြေးညီ အသိပေးပါမည်။"
-        Language.ENGLISH -> "The kitchen is preparing your meal. You'll receive real-time push notifications."
+        Language.ENGLISH -> "Order preparing. You'll receive real-time push notifications."
     }
 
     fun simulateStatusUpdate(lang: Language): String = when (lang) {
@@ -213,7 +208,7 @@ object Strings {
 
     fun homeTab(lang: Language): String = when (lang) {
         Language.BURMESE -> "ပင်မစာမျက်နှာ"
-        Language.ENGLISH -> "Menu"
+        Language.ENGLISH -> "Home"
     }
 
     fun trackingTab(lang: Language): String = when (lang) {
@@ -297,8 +292,8 @@ object Strings {
     }
 
     fun kbzAccountName(lang: Language): String = when (lang) {
-        Language.BURMESE -> "ဒေါ်ပွင့်စံ (မြန်မာ့ရိုးရာ မီးဖိုဆောင်)"
-        Language.ENGLISH -> "Daw Pwint San (Myanmar Traditional Kitchen)"
+        Language.BURMESE -> "ဒေါ်ပွင့်စံ (တိမ်တမန် ရခိုင်အစားအစာ)"
+        Language.ENGLISH -> "Daw Pwint San (Taim Ta Man Rakhine Food)"
     }
 
     fun kbzAccountNumber(): String = "09-789 456 123"
@@ -331,5 +326,570 @@ object Strings {
     fun viewKbzQr(lang: Language): String = when (lang) {
         Language.BURMESE -> "KBZPay QR နှင့် အကောင့်ကြည့်ရန်"
         Language.ENGLISH -> "View KBZPay QR & Account"
+    }
+
+    fun menuDrawer(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မီနူးဖွင့်ရန်"
+        Language.ENGLISH -> "Navigation Menu"
+    }
+
+    fun accountTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့် / ပရိုဖိုင်"
+        Language.ENGLISH -> "Account & Profile"
+    }
+
+    fun settingsTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဆက်တင်များ"
+        Language.ENGLISH -> "Settings"
+    }
+
+    fun logout(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်မှထွက်မည်"
+        Language.ENGLISH -> "Log Out"
+    }
+
+    fun switchAccount(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်ပြောင်းမည်"
+        Language.ENGLISH -> "Switch Account"
+    }
+
+    fun switchAccountDesc(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အခြားအမည် သို့မဟုတ် ဖုန်းနံပါတ်ဖြင့် မှာယူရန်"
+        Language.ENGLISH -> "Order under another name or phone number"
+    }
+
+    fun logoutConfirmTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်မှထွက်ရန် သေချာပါသလား?"
+        Language.ENGLISH -> "Log out of current profile?"
+    }
+
+    fun logoutConfirmDesc(lang: Language): String = when (lang) {
+        Language.BURMESE -> "လက်ရှိဖြည့်သွင်းထားသော အမည်နှင့် ဖုန်းနံပါတ် အချက်အလက်များကို ရှင်းလင်းပေးပါမည်။"
+        Language.ENGLISH -> "This will clear your locally saved name and delivery contact info."
+    }
+
+    fun cancel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မလုပ်တော့ပါ"
+        Language.ENGLISH -> "Cancel"
+    }
+
+    fun confirm(lang: Language): String = when (lang) {
+        Language.BURMESE -> "သေချာပါသည်"
+        Language.ENGLISH -> "Confirm"
+    }
+
+    fun customerSupport(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဖောက်သည် ဝန်ဆောင်မှု"
+        Language.ENGLISH -> "Customer Support"
+    }
+
+    fun hotlinePhone(): String = "09-789 456 123"
+
+    fun deliveryAreas(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပို့ဆောင်ပေးသော မြို့နယ်များ"
+        Language.ENGLISH -> "Delivery Areas & Fees"
+    }
+
+    fun appVersionLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဗားရှင်း"
+        Language.ENGLISH -> "Version"
+    }
+
+    fun loginOrSignUp(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်ဝင်ရန် / အကောင့်ဖွင့်ရန်"
+        Language.ENGLISH -> "Log In or Sign Up"
+    }
+
+    fun loginTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်ဝင်မည်"
+        Language.ENGLISH -> "Log In"
+    }
+
+    fun signUpTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်သစ်ဖွင့်မည်"
+        Language.ENGLISH -> "Create Account"
+    }
+
+    fun continueAsGuest(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဧည့်သည်အဖြစ် ဆက်လက်ကြည့်ရှုမည်"
+        Language.ENGLISH -> "Continue as Guest"
+    }
+
+    fun guestUser(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဧည့်သည်တော်"
+        Language.ENGLISH -> "Guest User"
+    }
+
+    fun guestUserDesc(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်မဝင်ဘဲ ပင်လယ်စာဟင်းပွဲများကို လွတ်လပ်စွာ ကြည့်ရှုမှာယူနိုင်ပါသည်"
+        Language.ENGLISH -> "Browse seafood dishes and menus freely without signing in"
+    }
+
+    fun authPromptSubtitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မှာယူမှုမှတ်တမ်းများနှင့် အမြန်မှာယူနိုင်ရန် အကောင့်ဝင်ပါ သို့မဟုတ် ဧည့်သည်အဖြစ် ဆက်လက်ဝင်ရောက်ပါ"
+        Language.ENGLISH -> "Sign in to save order history, or continue as guest to browse the menu freely"
+    }
+
+    fun enterPhone(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဖုန်းနံပါတ် ဖြည့်သွင်းပါ"
+        Language.ENGLISH -> "Enter Phone Number"
+    }
+
+    fun enterName(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အမည် အပြည့်အစုံ"
+        Language.ENGLISH -> "Full Name"
+    }
+
+    fun optionalPassword(lang: Language): String = when (lang) {
+        Language.BURMESE -> "လျှို့ဝှက်နံပါတ် (စိတ်ကြိုက်)"
+        Language.ENGLISH -> "Password (Optional)"
+    }
+
+    fun welcomeBackUser(name: String, lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကြိုဆိုပါသည် $name"
+        Language.ENGLISH -> "Welcome back, $name!"
+    }
+
+    fun guestModeActive(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဧည့်သည်အဖြစ် ကြည့်ရှုနေပါသည်"
+        Language.ENGLISH -> "Browsing as Guest"
+    }
+
+    // Admin Strings
+    fun adminTab(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စီမံခန့်ခွဲသူ"
+        Language.ENGLISH -> "Admin"
+    }
+
+    fun adminPortal(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စီမံခန့်ခွဲသူ ဒက်ရှ်ဘုတ်"
+        Language.ENGLISH -> "Admin Console"
+    }
+
+    fun adminLoginTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စီမံခန့်ခွဲသူ ဝင်ရောက်ရန်"
+        Language.ENGLISH -> "Admin Sign In"
+    }
+
+    fun adminBadge(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စီမံခန့်ခွဲသူ (Admin)"
+        Language.ENGLISH -> "Administrator"
+    }
+
+    fun customerBadge(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဝယ်ယူသူ (Customer)"
+        Language.ENGLISH -> "Customer"
+    }
+
+    fun adminProductsTab(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်းနှင့် ဈေးနှုန်း"
+        Language.ENGLISH -> "Products & Pricing"
+    }
+
+    fun adminUsersTab(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အသုံးပြုသူ စာရင်း"
+        Language.ENGLISH -> "User Accounts"
+    }
+
+    fun adminOrdersTab(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အော်ဒါများ စစ်ဆေးခြင်း"
+        Language.ENGLISH -> "Check Orders"
+    }
+
+    fun addProduct(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်း အသစ်ထည့်ရန်"
+        Language.ENGLISH -> "Add New Product"
+    }
+
+    fun editProduct(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်း ပြင်ဆင်ရန်"
+        Language.ENGLISH -> "Edit Product"
+    }
+
+    fun deleteProduct(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်း ဖျက်မည်"
+        Language.ENGLISH -> "Delete Product"
+    }
+
+    fun productNameEn(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အင်္ဂလိပ် အမည်"
+        Language.ENGLISH -> "Product Name (English)"
+    }
+
+    fun productNameMy(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မြန်မာ အမည်"
+        Language.ENGLISH -> "Product Name (Myanmar)"
+    }
+
+    fun priceMMKLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဈေးနှုန်း (ကျပ်)"
+        Language.ENGLISH -> "Price (MMK)"
+    }
+
+    fun unitLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ယူနစ် (ဥပမာ- ၁ ကီလို / ၅၀၀ ဂရမ်)"
+        Language.ENGLISH -> "Unit (e.g. per 1 kg)"
+    }
+
+    fun categoryLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အမျိုးအစား"
+        Language.ENGLISH -> "Category"
+    }
+
+    fun prepStyleLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပြင်ဆင်မှု ပုံစံ"
+        Language.ENGLISH -> "Prep Style"
+    }
+
+    fun occasionLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စားသုံးမည့် အခါ"
+        Language.ENGLISH -> "Dining Occasion"
+    }
+
+    fun descriptionEnLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အင်္ဂလိပ် အသေးစိတ် ဖော်ပြချက်"
+        Language.ENGLISH -> "Description (English)"
+    }
+
+    fun descriptionMyLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မြန်မာ အသေးစိတ် ဖော်ပြချက်"
+        Language.ENGLISH -> "Description (Myanmar)"
+    }
+
+    fun prepTimeMinLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပြင်ဆင်ချိန် (မိနစ်)"
+        Language.ENGLISH -> "Prep Time (minutes)"
+    }
+
+    fun imageUrlLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်း ဓာတ်ပုံ (Product Photo)"
+        Language.ENGLISH -> "Product Photo"
+    }
+
+    fun uploadProductPhoto(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဖုန်းပြခန်းမှ ဓာတ်ပုံ တင်မည် (Upload Photo)"
+        Language.ENGLISH -> "Upload Photo from Gallery"
+    }
+
+    fun choosePhotoFromGallery(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဖုန်းပြခန်းမှ ဓာတ်ပုံ ရွေးချယ်ပါ"
+        Language.ENGLISH -> "Choose Photo from Gallery"
+    }
+
+    fun changePhoto(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဓာတ်ပုံ ပြောင်းမည်"
+        Language.ENGLISH -> "Change Photo"
+    }
+
+    fun removePhoto(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဓာတ်ပုံ ပယ်ဖျက်မည်"
+        Language.ENGLISH -> "Remove Photo"
+    }
+
+    fun photoUploaded(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဓာတ်ပုံ တင်ထားပြီးပါပြီ"
+        Language.ENGLISH -> "Photo Uploaded"
+    }
+
+    fun uploadPaymentSlip(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ငွေလွှဲပြေစာ ဓာတ်ပုံ တင်ရန် (Upload Slip)"
+        Language.ENGLISH -> "Upload Payment Slip Screenshot"
+    }
+
+    fun chooseSlipFromGallery(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ငွေလွှဲပြေစာ စခရင်ရှော့ ရွေးချယ်ပါ"
+        Language.ENGLISH -> "Choose Slip Screenshot from Gallery"
+    }
+
+    fun paymentSlipAttached(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ငွေလွှဲပြေစာ ပူးတွဲပြီးပါပြီ ✓"
+        Language.ENGLISH -> "Payment Slip Attached ✓"
+    }
+
+    fun isPopularLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "လူကြိုက်များသော ပစ္စည်း"
+        Language.ENGLISH -> "Popular Item"
+    }
+
+    fun isSpicyLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အစပ်အရသာ ပါဝင်သည်"
+        Language.ENGLISH -> "Spicy"
+    }
+
+    fun isPremiumLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အဆင့်မြင့် အထူးပစ္စည်း"
+        Language.ENGLISH -> "Premium Item"
+    }
+
+    fun saveProduct(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်း သိမ်းဆည်းမည်"
+        Language.ENGLISH -> "Save Product"
+    }
+
+    fun createUserAccount(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်သစ် ဖွင့်ပေးရန်"
+        Language.ENGLISH -> "Create User Account"
+    }
+
+    fun roleLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့်အဆင့် / အခန်းကဏ္ဍ"
+        Language.ENGLISH -> "Account Role"
+    }
+
+    fun loginAsThisUser(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဤအကောင့်ဖြင့် ဝင်မည်"
+        Language.ENGLISH -> "Log In as User"
+    }
+
+    fun deleteAccount(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကောင့် ဖျက်မည်"
+        Language.ENGLISH -> "Delete Account"
+    }
+
+    fun updateOrderStatusTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အော်ဒါ အခြေအနေ ပြောင်းလဲရန်"
+        Language.ENGLISH -> "Update Order Status"
+    }
+
+    fun quickDemoAdminSignIn(lang: Language): String = when (lang) {
+        Language.BURMESE -> "Admin စမ်းသပ်ချက် အမြန်ဝင်ရန်"
+        Language.ENGLISH -> "One-Tap Demo Admin Sign-In"
+    }
+
+    fun demoAdminDesc(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကုန်ပစ္စည်းများ၊ ဈေးနှုန်းများနှင့် အော်ဒါများကို တိုက်ရိုက် စီမံခန့်ခွဲနိုင်ပါသည်"
+        Language.ENGLISH -> "Full access to edit products, prices, user accounts and customer orders"
+    }
+
+    fun customerView(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဝယ်ယူသူ စာမျက်နှာသို့ သွားမည်"
+        Language.ENGLISH -> "Customer Storefront"
+    }
+
+    fun totalOrdersLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စုစုပေါင်း အော်ဒါများ"
+        Language.ENGLISH -> "Total Orders"
+    }
+
+    fun totalRevenueLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "စုစုပေါင်း ရောင်းရငွေ"
+        Language.ENGLISH -> "Total Revenue"
+    }
+
+    fun uploadQrImage(lang: Language): String = when (lang) {
+        Language.BURMESE -> "QR ကုဒ် ဓာတ်ပုံ တင်ရန်"
+        Language.ENGLISH -> "Upload QR Code Image"
+    }
+
+    fun chooseQrFromGallery(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဖုန်းထဲမှ QR ပုံ ရွေးချယ်တင်မည်"
+        Language.ENGLISH -> "Upload QR from Gallery"
+    }
+
+    fun qrImageAttached(lang: Language): String = when (lang) {
+        Language.BURMESE -> "QR ဓာတ်ပုံ ထည့်သွင်းပြီးပါပြီ"
+        Language.ENGLISH -> "QR Image Attached"
+    }
+
+    fun changeQrImage(lang: Language): String = when (lang) {
+        Language.BURMESE -> "QR ပုံ အသစ်လဲမည်"
+        Language.ENGLISH -> "Change QR Image"
+    }
+
+    fun removeQrImage(lang: Language): String = when (lang) {
+        Language.BURMESE -> "QR ပုံ ဖျက်မည်"
+        Language.ENGLISH -> "Remove QR Image"
+    }
+
+    fun paymentBudgetThresholds(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ငွေပေးချေမှု ကန့်သတ်ချက် သတ်မှတ်ချက်များ"
+        Language.ENGLISH -> "Payment Budget Thresholds"
+    }
+
+    fun codThresholdTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "COD ပစ္စည်းရောက်ငွေချေ ကန့်သတ်ချက်"
+        Language.ENGLISH -> "Cash on Delivery (COD) Budget Threshold"
+    }
+
+    fun codThresholdSubtitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဝယ်ယူသည့် ငွေပမာဏ ကန့်သတ်ချက်များ သတ်မှတ်နိုင်ပါသည်"
+        Language.ENGLISH -> "Configure minimum and maximum order amounts to qualify for COD"
+    }
+
+    fun codThresholdDesc(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဝယ်ယူသူများသည် သတ်မှတ်ထားသော ငွေပမာဏအတွင်း ဝယ်ယူမှသာ ပစ္စည်းရောက်ငွေချေ (COD) ကို ရွေးချယ်နိုင်မည်ဖြစ်ပါသည်။ ယာဉ်မောင်းလုံခြုံရေးနှင့် လုပ်ငန်းအဆင်ပြေစေရန် ကန့်သတ်ချက်များ သတ်မှတ်နိုင်ပါသည်။"
+        Language.ENGLISH -> "Set budget thresholds for Cash on Delivery. Customers can only select COD if their order total meets these rules (e.g. over 100,000 MMK)."
+    }
+
+    fun minOrderRequired(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အနည်းဆုံး မှာယူရမည့် ငွေပမာဏ (Min Budget)"
+        Language.ENGLISH -> "Minimum Order Amount (Min Budget)"
+    }
+
+    fun maxOrderAllowed(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အများဆုံး ကန့်သတ်ငွေပမာဏ (Max Budget Cap)"
+        Language.ENGLISH -> "Maximum Order Cap (Max Budget)"
+    }
+
+    fun noLimit(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကန့်သတ်မထားပါ"
+        Language.ENGLISH -> "No Limit"
+    }
+
+    fun editThreshold(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ကန့်သတ်ချက် ပြင်ဆင်မည်"
+        Language.ENGLISH -> "Edit Threshold"
+    }
+
+    fun codMinThresholdHelp(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဤပမာဏနှင့်အထက် ဝယ်ယူမှသာ ပစ္စည်းရောက်ငွေချေ ရွေးချယ်နိုင်ပါမည်"
+        Language.ENGLISH -> "Only orders meeting or exceeding this amount can choose COD"
+    }
+
+    fun codLockedNote(lang: Language, minMmk: String, diffMmk: String): String = when (lang) {
+        Language.BURMESE -> "ပစ္စည်းရောက်ငွေချေအတွက် အနည်းဆုံး $minMmk ကျပ် လိုအပ်ပါသည် (ထပ်မံလိုအပ်ငွေ: $diffMmk ကျပ်)"
+        Language.ENGLISH -> "Cash on Delivery requires order ≥ $minMmk MMK (Add $diffMmk MMK more to unlock)"
+    }
+
+    fun codUnlockedNote(lang: Language, minMmk: String): String = when (lang) {
+        Language.BURMESE -> "✓ $minMmk ကျပ်ပြည့်ပြီးဖြစ်၍ ပစ္စည်းရောက်ငွေချေ (COD) အသုံးပြုနိုင်ပါပြီ"
+        Language.ENGLISH -> "✓ Order qualifies! Cash on Delivery is unlocked (≥ $minMmk MMK)"
+    }
+
+    // Logistics & Delivery Settings Strings
+    fun logisticsTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပို့ဆောင်ရေး စီမံခန့်ခွဲမှု"
+        Language.ENGLISH -> "Logistics & Delivery Settings"
+    }
+
+    fun logisticsSubtitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မြို့နယ်အလိုက် ပို့ဆောင်ခ၊ အခမဲ့သတ်မှတ်ချက်နှင့် ယာဉ်မောင်းများ စီမံခြင်း"
+        Language.ENGLISH -> "Manage delivery zones, free shipping rules, rush fees & couriers"
+    }
+
+    fun deliveryZones(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မြို့နယ်နှင့် ပို့ဆောင်ခ ဇုန်များ"
+        Language.ENGLISH -> "Delivery Zones & Fees"
+    }
+
+    fun deliveryPolicies(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပို့ဆောင်ရေး စည်းမျဉ်းနှင့် မူဝါဒများ"
+        Language.ENGLISH -> "Delivery Policies & Thresholds"
+    }
+
+    fun deliveryCouriers(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပို့ဆောင်ရေး မိတ်ဖက်များနှင့် ယာဉ်မောင်းများ"
+        Language.ENGLISH -> "Couriers & Delivery Fleets"
+    }
+
+    fun freeDeliveryRule(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပို့ဆောင်ခ အခမဲ့ စည်းမျဉ်း"
+        Language.ENGLISH -> "Free Delivery Policy"
+    }
+
+    fun expressRushDelivery(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အမြန်ပို့ဆောင်ရေး (Express Rush)"
+        Language.ENGLISH -> "Express Rush Delivery"
+    }
+
+    fun storeSelfPickup(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ဆိုင်မှ ကိုယ်တိုင်လာယူခြင်း (Takeaway)"
+        Language.ENGLISH -> "Store Self-Pickup (Takeaway)"
+    }
+
+    fun coldChainInsulation(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပင်လယ်စာ အအေးထိန်း ရေခဲသေတ္တာ ထုပ်ပိုးမှု"
+        Language.ENGLISH -> "Cold-Chain Thermal Packaging"
+    }
+
+    fun addDeliveryZone(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မြို့နယ်/ဇုန် အသစ်ထည့်မည်"
+        Language.ENGLISH -> "Add Delivery Zone"
+    }
+
+    fun editDeliveryZone(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပို့ဆောင်ခနှင့် ကြာချိန် ပြင်ဆင်ရန်"
+        Language.ENGLISH -> "Edit Zone Delivery Fee"
+    }
+
+    fun resetTownshipFees(lang: Language): String = when (lang) {
+        Language.BURMESE -> "မူလဈေးနှုန်းများသို့ ပြန်ထားမည်"
+        Language.ENGLISH -> "Reset to Default Fees"
+    }
+
+    // Product Fulfillment, Limits, Additional Costs & Discounts
+    fun fulfillmentOptionsTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ပစ္စည်းပို့ဆောင်မှုနှင့် ရယူမှုစနစ် (Fulfillment Options)"
+        Language.ENGLISH -> "Fulfillment & Pickup Options"
+    }
+
+    fun allowSelfPickupLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "🏪 ဆိုင်သို့ ကိုယ်တိုင်လာယူခွင့် (Self Pick-up)"
+        Language.ENGLISH -> "🏪 Allow Self Pick-up"
+    }
+
+    fun allowDeliveryLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "🚚 အိမ်အရောက် ပို့ဆောင်ခွင့် (Home Delivery)"
+        Language.ENGLISH -> "🚚 Allow Home Delivery"
+    }
+
+    fun regionCoverageTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "📍 ပို့ဆောင်ပေးနိုင်သော မြို့နယ်/ဒေသများ (Service Regions)"
+        Language.ENGLISH -> "📍 Available Cities & Regions"
+    }
+
+    fun allRegionsText(lang: Language): String = when (lang) {
+        Language.BURMESE -> "🇲🇲 တစ်နိုင်ငံလုံးသို့ ပို့ဆောင်ပေးပါသည် (All Regions / Nationwide)"
+        Language.ENGLISH -> "🇲🇲 Available Nationwide across all regions & cities"
+    }
+
+    fun minPurchaseTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "⚖️ အနည်းဆုံး ဝယ်ယူရန် ပမာဏ (Minimum Purchase)"
+        Language.ENGLISH -> "⚖️ Minimum Purchase Requirement"
+    }
+
+    fun minPurchaseQtyLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အနည်းဆုံး အရေအတွက်/ကီလို"
+        Language.ENGLISH -> "Minimum Quantity / kg"
+    }
+
+    fun minPurchaseAmountLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အနည်းဆုံး အော်ဒါကျသင့်ငွေ (MMK)"
+        Language.ENGLISH -> "Minimum Order Amount (MMK)"
+    }
+
+    fun additionalServicesTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "❄️ အပိုဆောင်း ဝန်ဆောင်မှု ရွေးချယ်စရာများ (Additional Services)"
+        Language.ENGLISH -> "❄️ Optional Care & Special Prep"
+    }
+
+    fun coldStorageService(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ရေခဲပုံး & အအေးထိန်း ထုပ်ပိုးမှု (Ice Box Cold Storage)"
+        Language.ENGLISH -> "Ice Box & Cold Storage Packaging"
+    }
+
+    fun specialPrepService(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အကြေးခွံခွာ သန့်စင် လေလုံထုပ်ပိုးမှု (Special Prep & Vacuum Seal)"
+        Language.ENGLISH -> "Special Cleaning & Vacuum Sealing"
+    }
+
+    fun discountTiersTitle(lang: Language): String = when (lang) {
+        Language.BURMESE -> "🎉 လျှော့စျေး အထူးအခွင့်အရေးများ (Discounts & Offers)"
+        Language.ENGLISH -> "🎉 Bulk & Value Discounts"
+    }
+
+    fun discountByQtyLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အရေအတွက်အလိုက် လျှော့စျေး (%)"
+        Language.ENGLISH -> "Discount by Quantity (%)"
+    }
+
+    fun discountByAmountLabel(lang: Language): String = when (lang) {
+        Language.BURMESE -> "ငွေပမာဏအလိုက် လျှော့စျေး (%)"
+        Language.ENGLISH -> "Discount by Total Kyats (%)"
+    }
+
+    fun discountApplied(lang: Language): String = when (lang) {
+        Language.BURMESE -> "အထူးလျှော့စျေး ရရှိထားပါသည်"
+        Language.ENGLISH -> "Discount Savings Applied"
     }
 }

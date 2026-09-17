@@ -1,15 +1,25 @@
 package com.example.ui.components
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,17 +32,26 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddPhotoAlternate
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CloudUpload
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material.icons.filled.ZoomIn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,17 +73,25 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil.compose.SubcomposeAsyncImage
 import com.example.model.Language
+import com.example.model.QrPaymentOption
 import com.example.model.Strings
+import java.io.File
+import java.io.FileOutputStream
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KbzPayDialog(
     amountMMK: Int,
@@ -72,18 +99,57 @@ fun KbzPayDialog(
     timeRemainingSeconds: Int = 600, // 10 minutes default
     isPaid: Boolean = false,
     currentLanguage: Language,
+    qrOptions: List<QrPaymentOption> = emptyList(),
     onConfirmPaid: () -> Unit,
     onSimulateTimerExpiry: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val clipboardManager = LocalClipboardManager.current
     var copiedLabel by remember { mutableStateOf<String?>(null) }
+    var showEnlargedQr by remember { mutableStateOf(false) }
+    var paymentSlipUri by remember { mutableStateOf<String?>(null) }
 
-    val kbzBlue = Color(0xFF003874)
+    val context = LocalContext.current
+    val slipPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            val savedPath = saveSlipImageToInternalStorage(context, uri)
+            if (!savedPath.isNullOrBlank()) {
+                paymentSlipUri = savedPath
+            }
+        }
+    }
+
+    val activeQrOptions = remember(qrOptions) { qrOptions.filter { it.isEnabled } }
+    var selectedQrOptionId by remember(activeQrOptions) {
+        mutableStateOf(activeQrOptions.firstOrNull()?.id)
+    }
+    val currentSelectedOption = activeQrOptions.find { it.id == selectedQrOptionId }
+
+    val kbzBlue = currentSelectedOption?.let {
+        try {
+            Color(android.graphics.Color.parseColor(it.colorHex))
+        } catch (e: Exception) {
+            Color(0xFF003874)
+        }
+    } ?: Color(0xFF003874)
     val kbzCyan = Color(0xFF00A3E0)
-    val accountName = Strings.kbzAccountName(currentLanguage)
-    val accountNumber = Strings.kbzAccountNumber()
-    val transferNote = orderId?.let { "Order #$it" } ?: "Food Order"
+
+    val gatewayName = currentSelectedOption?.name ?: Strings.kbzPayTitle(currentLanguage)
+    val accountName = currentSelectedOption?.accountName ?: Strings.kbzAccountName(currentLanguage)
+    val accountNumber = currentSelectedOption?.accountPhoneOrNo ?: Strings.kbzAccountNumber()
+    val transferNote = currentSelectedOption?.qrCodeNote?.ifBlank { null } ?: (orderId?.let { "Order #$it" } ?: "Food Order")
+    val badgeText = remember(gatewayName) {
+        when {
+            gatewayName.contains("KBZ", ignoreCase = true) || gatewayName.contains("KPay", ignoreCase = true) -> "KPay"
+            gatewayName.contains("Wave", ignoreCase = true) -> "Wave"
+            gatewayName.contains("AYA", ignoreCase = true) -> "AYA"
+            gatewayName.contains("CB", ignoreCase = true) -> "CB"
+            gatewayName.contains("UAB", ignoreCase = true) -> "UAB"
+            else -> "QR"
+        }
+    }
 
     // Format minutes and seconds
     val minutes = timeRemainingSeconds / 60
@@ -123,7 +189,7 @@ fun KbzPayDialog(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            // KBZ Badge
+                            // QR Badge
                             Surface(
                                 shape = RoundedCornerShape(8.dp),
                                 color = Color.White,
@@ -131,7 +197,7 @@ fun KbzPayDialog(
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
                                     Text(
-                                        text = "KPay",
+                                        text = badgeText,
                                         color = kbzBlue,
                                         fontWeight = FontWeight.Black,
                                         fontSize = 11.sp
@@ -141,7 +207,7 @@ fun KbzPayDialog(
                             Spacer(modifier = Modifier.width(10.dp))
                             Column {
                                 Text(
-                                    text = Strings.kbzPayTitle(currentLanguage),
+                                    text = gatewayName,
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
@@ -168,6 +234,36 @@ fun KbzPayDialog(
                                 contentDescription = "Close",
                                 tint = Color.White,
                                 modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+                }
+
+                // If multiple active QR options are available, show switcher chips
+                if (activeQrOptions.size > 1) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState())
+                            .padding(horizontal = 16.dp, vertical = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        activeQrOptions.forEach { opt ->
+                            val isSelected = opt.id == (currentSelectedOption?.id ?: activeQrOptions.first().id)
+                            val optColor = try {
+                                Color(android.graphics.Color.parseColor(opt.colorHex))
+                            } catch (e: Exception) {
+                                Color(0xFF003874)
+                            }
+
+                            FilterChip(
+                                selected = isSelected,
+                                onClick = { selectedQrOptionId = opt.id },
+                                label = { Text(opt.name, fontSize = 12.sp, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal) },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    selectedContainerColor = optColor,
+                                    selectedLabelColor = Color.White
+                                )
                             )
                         }
                     }
@@ -248,6 +344,7 @@ fun KbzPayDialog(
                     }
 
                     // QR Code Scan Container
+                    val hasUploadedQrImage = !currentSelectedOption?.qrImageUrl.isNullOrBlank()
                     Card(
                         shape = RoundedCornerShape(16.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -256,28 +353,60 @@ fun KbzPayDialog(
                         modifier = Modifier
                             .size(210.dp)
                             .testTag("kbz_qr_scan_box")
+                            .then(
+                                if (hasUploadedQrImage) {
+                                    Modifier.clickable { showEnlargedQr = true }
+                                } else Modifier
+                            )
                     ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(12.dp),
+                                .padding(10.dp),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            // Authentic Vector QR Matrix Drawing
-                            KbzQrCodeCanvas(modifier = Modifier.size(150.dp))
+                            if (hasUploadedQrImage) {
+                                SubcomposeAsyncImage(
+                                    model = currentSelectedOption?.qrImageUrl,
+                                    contentDescription = "$gatewayName QR Code",
+                                    contentScale = ContentScale.Fit,
+                                    modifier = Modifier
+                                        .size(150.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    loading = {
+                                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                            CircularProgressIndicator(
+                                                modifier = Modifier.size(28.dp),
+                                                strokeWidth = 2.5.dp,
+                                                color = kbzBlue
+                                            )
+                                        }
+                                    },
+                                    error = {
+                                        // Fallback to Vector QR Canvas
+                                        KbzQrCodeCanvas(modifier = Modifier.size(150.dp), qrColor = kbzBlue)
+                                    }
+                                )
+                            } else {
+                                // Authentic Vector QR Matrix Drawing
+                                KbzQrCodeCanvas(modifier = Modifier.size(150.dp), qrColor = kbzBlue)
+                            }
 
-                            Spacer(modifier = Modifier.height(4.dp))
+                            Spacer(modifier = Modifier.height(6.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
-                                    imageVector = Icons.Default.QrCodeScanner,
+                                    imageVector = if (hasUploadedQrImage) Icons.Default.ZoomIn else Icons.Default.QrCodeScanner,
                                     contentDescription = null,
                                     tint = kbzBlue,
-                                    modifier = Modifier.size(12.dp)
+                                    modifier = Modifier.size(13.dp)
                                 )
                                 Spacer(modifier = Modifier.width(4.dp))
                                 Text(
-                                    text = "Scan with KBZPay",
+                                    text = if (hasUploadedQrImage) {
+                                        if (currentLanguage == Language.BURMESE) "ချဲ့ကြည့်ရန်နှိပ်ပါ • $gatewayName QR"
+                                        else "Tap to zoom • $gatewayName QR"
+                                    } else "Scan with $gatewayName",
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = kbzBlue
@@ -502,6 +631,152 @@ fun KbzPayDialog(
                         }
                     }
 
+                    // Customer Payment Slip / Receipt Screenshot Upload
+                    Card(
+                        shape = RoundedCornerShape(14.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                        ),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ReceiptLong,
+                                    contentDescription = null,
+                                    tint = kbzBlue,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Text(
+                                    text = Strings.uploadPaymentSlip(currentLanguage),
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+
+                            if (paymentSlipUri != null) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .background(MaterialTheme.colorScheme.surface)
+                                        .border(1.dp, Color(0xFF2E7D32).copy(alpha = 0.3f), RoundedCornerShape(10.dp))
+                                        .padding(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Card(
+                                        shape = RoundedCornerShape(6.dp),
+                                        border = BorderStroke(1.dp, Color.LightGray.copy(alpha = 0.5f)),
+                                        modifier = Modifier.size(60.dp)
+                                    ) {
+                                        SubcomposeAsyncImage(
+                                            model = paymentSlipUri,
+                                            contentDescription = "Uploaded Payment Slip",
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier.fillMaxSize(),
+                                            loading = {
+                                                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                                                }
+                                            }
+                                        )
+                                    }
+
+                                    Spacer(modifier = Modifier.width(10.dp))
+
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Surface(
+                                            shape = RoundedCornerShape(4.dp),
+                                            color = Color(0xFF2E7D32).copy(alpha = 0.12f)
+                                        ) {
+                                            Text(
+                                                text = Strings.paymentSlipAttached(currentLanguage),
+                                                fontSize = 10.sp,
+                                                color = Color(0xFF2E7D32),
+                                                fontWeight = FontWeight.Bold,
+                                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Text(
+                                            text = paymentSlipUri!!.substringAfterLast("/").take(20),
+                                            fontSize = 10.sp,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis
+                                        )
+                                        Spacer(modifier = Modifier.height(4.dp))
+                                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                            OutlinedButton(
+                                                onClick = {
+                                                    slipPickerLauncher.launch(
+                                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                                    )
+                                                },
+                                                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp),
+                                                modifier = Modifier.height(28.dp)
+                                            ) {
+                                                Icon(Icons.Default.AddPhotoAlternate, contentDescription = null, modifier = Modifier.size(12.dp))
+                                                Spacer(modifier = Modifier.width(4.dp))
+                                                Text(Strings.changePhoto(currentLanguage), fontSize = 10.sp)
+                                            }
+                                            IconButton(
+                                                onClick = { paymentSlipUri = null },
+                                                modifier = Modifier.size(28.dp)
+                                            ) {
+                                                Icon(
+                                                    Icons.Default.DeleteOutline,
+                                                    contentDescription = Strings.removePhoto(currentLanguage),
+                                                    tint = MaterialTheme.colorScheme.error,
+                                                    modifier = Modifier.size(16.dp)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                Button(
+                                    onClick = {
+                                        slipPickerLauncher.launch(
+                                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                        )
+                                    },
+                                    colors = ButtonDefaults.buttonColors(containerColor = kbzBlue),
+                                    shape = RoundedCornerShape(10.dp),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .testTag("upload_payment_slip_button")
+                                ) {
+                                    Icon(Icons.Default.CloudUpload, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = Strings.chooseSlipFromGallery(currentLanguage),
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                Text(
+                                    text = if (currentLanguage == Language.BURMESE)
+                                        "ငွေလွှဲပြေစာ စခရင်ရှော့ ဓာတ်ပုံကို တိုက်ရိုက် တင်နိုင်ပါသည်။ (အတည်ပြု မြန်ဆန်စေပါသည်)"
+                                    else
+                                        "Upload your payment receipt screenshot directly from gallery for faster verification.",
+                                    fontSize = 10.sp,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+
                     // Test Reminder Trigger Quick Button
                     OutlinedButton(
                         onClick = onSimulateTimerExpiry,
@@ -562,14 +837,82 @@ fun KbzPayDialog(
             }
         }
     }
+
+    // Fullscreen / Zoomed QR Preview for scanning convenience
+    if (showEnlargedQr && !currentSelectedOption?.qrImageUrl.isNullOrBlank()) {
+        Dialog(onDismissRequest = { showEnlargedQr = false }) {
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "$gatewayName QR Code",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = kbzBlue
+                        )
+                        IconButton(onClick = { showEnlargedQr = false }) {
+                            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.DarkGray)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    SubcomposeAsyncImage(
+                        model = currentSelectedOption?.qrImageUrl,
+                        contentDescription = "$gatewayName QR Code Enlarged",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color.White),
+                        loading = {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator(color = kbzBlue)
+                            }
+                        },
+                        error = {
+                            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                KbzQrCodeCanvas(modifier = Modifier.size(240.dp), qrColor = kbzBlue)
+                            }
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Text(
+                        text = if (currentLanguage == Language.BURMESE) "အခြားဖုန်းဖြင့် စကင်ဖတ်၍ ငွေချေပါ"
+                        else "Scan with your banking or wallet app to pay",
+                        fontSize = 11.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+        }
+    }
 }
 
 /**
  * Clean Canvas-rendered QR Matrix with realistic finder patterns & center KPay badge
  */
 @Composable
-private fun KbzQrCodeCanvas(modifier: Modifier = Modifier) {
-    val kbzBlue = Color(0xFF003874)
+private fun KbzQrCodeCanvas(
+    modifier: Modifier = Modifier,
+    qrColor: Color = Color(0xFF003874)
+) {
+    val kbzBlue = qrColor
     val kbzCyan = Color(0xFF00A3E0)
 
     Canvas(modifier = modifier) {
@@ -674,5 +1017,23 @@ private fun KbzQrCodeCanvas(modifier: Modifier = Modifier) {
             size = Size(centerSize - 4f, centerSize - 4f),
             cornerRadius = CornerRadius(3.dp.toPx(), 3.dp.toPx())
         )
+    }
+}
+
+private fun saveSlipImageToInternalStorage(context: Context, sourceUri: Uri): String? {
+    return try {
+        val slipsDir = File(context.filesDir, "payment_slips")
+        if (!slipsDir.exists()) {
+            slipsDir.mkdirs()
+        }
+        val targetFile = File(slipsDir, "slip_${System.currentTimeMillis()}.jpg")
+        context.contentResolver.openInputStream(sourceUri)?.use { input ->
+            FileOutputStream(targetFile).use { output ->
+                input.copyTo(output)
+            }
+        }
+        targetFile.absolutePath
+    } catch (e: Exception) {
+        sourceUri.toString()
     }
 }

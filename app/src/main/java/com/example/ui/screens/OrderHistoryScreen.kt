@@ -1,6 +1,7 @@
 package com.example.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,12 +15,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AssignmentReturn
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.NearMe
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Replay
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -29,9 +35,15 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,8 +68,97 @@ fun OrderHistoryScreen(
     onTrackOrder: (String) -> Unit,
     onReorder: (OrderEntity) -> Unit,
     onBrowseMenuClick: () -> Unit,
+    onRequestReturn: (orderId: String, reason: String) -> Unit = { _, _ -> },
+    onContactSupport: (orderId: String) -> Unit = {},
+    isAdmin: Boolean = false,
+    onAdminBack: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    var orderForReturn by remember { mutableStateOf<OrderEntity?>(null) }
+    var returnReasonInput by remember { mutableStateOf("") }
+    var returnReasonError by remember { mutableStateOf(false) }
+
+    if (orderForReturn != null) {
+        val targetOrder = orderForReturn!!
+        AlertDialog(
+            onDismissRequest = {
+                orderForReturn = null
+                returnReasonInput = ""
+                returnReasonError = false
+            },
+            title = {
+                Text(
+                    text = if (currentLanguage == Language.BURMESE) "ပစ္စည်းပြန်ပို့ / ငွေပြန်အမ်း တောင်းဆိုခြင်း" else "Request Return & Refund",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text(
+                        text = if (currentLanguage == Language.BURMESE)
+                            "အော်ဒါ #${targetOrder.orderId} အတွက် ပစ္စည်းပြန်ပို့လိုသော အကြောင်းပြချက်ကို ထည့်သွင်းပေးပါရန်။"
+                        else
+                            "Please state the reason for returning Order #${targetOrder.orderId}:",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    OutlinedTextField(
+                        value = returnReasonInput,
+                        onValueChange = {
+                            returnReasonInput = it
+                            if (it.isNotBlank()) returnReasonError = false
+                        },
+                        label = {
+                            Text(if (currentLanguage == Language.BURMESE) "အကြောင်းပြချက် (မဖြစ်မနေ)" else "Reason (Required)")
+                        },
+                        placeholder = {
+                            Text(if (currentLanguage == Language.BURMESE) "ဥပမာ - ပစ္စည်းမှားယွင်းရောက်ရှိခြင်း သို့မဟုတ် ပျက်စီးနေခြင်း" else "e.g., Wrong item received, defective packaging, damaged goods")
+                        },
+                        isError = returnReasonError,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("return_reason_input"),
+                        minLines = 3,
+                        maxLines = 5
+                    )
+                    if (returnReasonError) {
+                        Text(
+                            text = if (currentLanguage == Language.BURMESE) "ကျေးဇူးပြု၍ အကြောင်းပြချက် ထည့်သွင်းပါ" else "Please provide a reason",
+                            color = MaterialTheme.colorScheme.error,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (returnReasonInput.isBlank()) {
+                            returnReasonError = true
+                        } else {
+                            onRequestReturn(targetOrder.orderId, returnReasonInput.trim())
+                            orderForReturn = null
+                            returnReasonInput = ""
+                            returnReasonError = false
+                        }
+                    },
+                    modifier = Modifier.testTag("confirm_submit_return_btn")
+                ) {
+                    Text(if (currentLanguage == Language.BURMESE) "တောင်းဆိုမှု ပေးပို့မည်" else "Submit Request")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    orderForReturn = null
+                    returnReasonInput = ""
+                    returnReasonError = false
+                }) {
+                    Text(if (currentLanguage == Language.BURMESE) "မလုပ်တော့ပါ" else "Cancel")
+                }
+            }
+        )
+    }
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -73,6 +174,27 @@ fun OrderHistoryScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (isAdmin) {
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .clickable { onAdminBack() }
+                                .testTag("admin_history_back_button")
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                     Icon(
                         imageVector = Icons.Default.History,
                         contentDescription = null,
@@ -147,7 +269,9 @@ fun OrderHistoryScreen(
                     order = order,
                     currentLanguage = currentLanguage,
                     onTrackOrder = { onTrackOrder(order.orderId) },
-                    onReorder = { onReorder(order) }
+                    onReorder = { onReorder(order) },
+                    onRequestReturn = { orderForReturn = order },
+                    onContactSupport = { onContactSupport(order.orderId) }
                 )
             }
         }
@@ -163,7 +287,9 @@ private fun OrderHistoryCard(
     order: OrderEntity,
     currentLanguage: Language,
     onTrackOrder: () -> Unit,
-    onReorder: () -> Unit
+    onReorder: () -> Unit,
+    onRequestReturn: () -> Unit = {},
+    onContactSupport: () -> Unit = {}
 ) {
     val currentStatus = try {
         OrderStatus.valueOf(order.status)
@@ -211,25 +337,50 @@ private fun OrderHistoryCard(
                     )
                 }
 
-                Surface(
-                    shape = RoundedCornerShape(8.dp),
-                    color = when (currentStatus) {
-                        OrderStatus.DELIVERED -> MaterialTheme.colorScheme.tertiaryContainer
-                        OrderStatus.CANCELLED -> MaterialTheme.colorScheme.errorContainer
-                        else -> MaterialTheme.colorScheme.primaryContainer
-                    }
-                ) {
-                    Text(
-                        text = currentStatus.title(currentLanguage),
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
+                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
                         color = when (currentStatus) {
-                            OrderStatus.DELIVERED -> MaterialTheme.colorScheme.onTertiaryContainer
-                            OrderStatus.CANCELLED -> MaterialTheme.colorScheme.onErrorContainer
-                            else -> MaterialTheme.colorScheme.onPrimaryContainer
-                        },
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
-                    )
+                            OrderStatus.DELIVERED -> MaterialTheme.colorScheme.tertiaryContainer
+                            OrderStatus.CANCELLED -> MaterialTheme.colorScheme.errorContainer
+                            else -> MaterialTheme.colorScheme.primaryContainer
+                        }
+                    ) {
+                        Text(
+                            text = currentStatus.title(currentLanguage),
+                            style = MaterialTheme.typography.labelSmall,
+                            fontWeight = FontWeight.Bold,
+                            color = when (currentStatus) {
+                                OrderStatus.DELIVERED -> MaterialTheme.colorScheme.onTertiaryContainer
+                                OrderStatus.CANCELLED -> MaterialTheme.colorScheme.onErrorContainer
+                                else -> MaterialTheme.colorScheme.onPrimaryContainer
+                            },
+                            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                        )
+                    }
+
+                    if (order.returnStatus != "NONE") {
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = when (order.returnStatus) {
+                                "APPROVED", "REFUNDED" -> MaterialTheme.colorScheme.tertiaryContainer
+                                "REJECTED" -> MaterialTheme.colorScheme.errorContainer
+                                else -> MaterialTheme.colorScheme.secondaryContainer
+                            }
+                        ) {
+                            Text(
+                                text = "Return: ${order.returnStatus}",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = when (order.returnStatus) {
+                                    "APPROVED", "REFUNDED" -> MaterialTheme.colorScheme.onTertiaryContainer
+                                    "REJECTED" -> MaterialTheme.colorScheme.onErrorContainer
+                                    else -> MaterialTheme.colorScheme.onSecondaryContainer
+                                },
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                    }
                 }
             }
 
@@ -245,6 +396,24 @@ private fun OrderHistoryCard(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+
+            // Cancellation Reason
+            if (order.cancellationReason.isNotBlank()) {
+                Text(
+                    text = "${if (currentLanguage == Language.BURMESE) "ပယ်ဖျက်ရသည့် အကြောင်းရင်း" else "Cancellation Reason"}: ${order.cancellationReason}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            // Return Reason
+            if (order.returnReason.isNotBlank()) {
+                Text(
+                    text = "${if (currentLanguage == Language.BURMESE) "ပြန်ပို့ရသည့် အကြောင်းရင်း" else "Return Reason"}: ${order.returnReason}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
 
             HorizontalDivider(color = DividerDefaults.color.copy(alpha = 0.5f))
 
@@ -283,6 +452,48 @@ private fun OrderHistoryCard(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(text = Strings.orderAgain(currentLanguage), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
+                }
+            }
+
+            // Return & Support Actions
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                if (currentStatus == OrderStatus.DELIVERED && order.returnStatus == "NONE") {
+                    OutlinedButton(
+                        onClick = onRequestReturn,
+                        shape = RoundedCornerShape(10.dp),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .testTag("request_return_button_${order.orderId}")
+                    ) {
+                        Icon(imageVector = Icons.Default.AssignmentReturn, contentDescription = null, modifier = Modifier.size(14.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = if (currentLanguage == Language.BURMESE) "ပစ္စည်းပြန်ပို့မည်" else "Request Return",
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
+                OutlinedButton(
+                    onClick = onContactSupport,
+                    shape = RoundedCornerShape(10.dp),
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 10.dp, vertical = 4.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag("contact_support_order_btn_${order.orderId}")
+                ) {
+                    Icon(imageVector = Icons.Default.Phone, contentDescription = null, modifier = Modifier.size(14.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = if (currentLanguage == Language.BURMESE) "အကူအညီတောင်းမည်" else "Contact Support",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
                 }
             }
         }

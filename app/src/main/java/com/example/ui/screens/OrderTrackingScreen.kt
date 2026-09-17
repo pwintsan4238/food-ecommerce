@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Fastfood
 import androidx.compose.material.icons.filled.LocationOn
@@ -58,6 +60,10 @@ fun OrderTrackingScreen(
     onCancelOrder: (String) -> Unit,
     onBrowseMenuClick: () -> Unit,
     onOpenKbzPayQr: (String) -> Unit = {},
+    isAdmin: Boolean = false,
+    onAdminBack: () -> Unit = {},
+    brandName: String = "",
+    supportPhone: String = "",
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -75,6 +81,27 @@ fun OrderTrackingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (isAdmin) {
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.primaryContainer,
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .clickable { onAdminBack() }
+                                .testTag("admin_tracking_back_button")
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "Back",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                     Icon(
                         imageVector = Icons.Default.LocationOn,
                         contentDescription = null,
@@ -229,11 +256,13 @@ fun OrderTrackingScreen(
                                 )
                             }
 
+                            val displayBrand = brandName.ifBlank { if (currentLanguage == Language.BURMESE) "တိမ်တမန်" else "Taim Ta Man" }
+                            val displayContact = if (supportPhone.isNotBlank()) " ($displayBrand - $supportPhone)" else ""
                             Text(
                                 text = if (currentLanguage == Language.BURMESE)
-                                    "ကျသင့်ငွေ: ${Strings.mmkCurrency(currentLanguage, currentTrackedOrder.grandTotalMMK)} (ဒေါ်ပွင့်စံ - 09789456123)"
+                                    "ကျသင့်ငွေ: ${Strings.mmkCurrency(currentLanguage, currentTrackedOrder.grandTotalMMK)}$displayContact"
                                 else
-                                    "Total: ${Strings.mmkCurrency(currentLanguage, currentTrackedOrder.grandTotalMMK)} (Daw Pwint San - 09789456123)",
+                                    "Total: ${Strings.mmkCurrency(currentLanguage, currentTrackedOrder.grandTotalMMK)}$displayContact",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )

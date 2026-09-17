@@ -18,16 +18,20 @@ object OrderNotificationHelper {
     private const val CHANNEL_DESC = "Real-time updates for your Myanmar food delivery orders"
 
     fun createNotificationChannel(context: Context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
-                description = CHANNEL_DESC
-                enableVibration(true)
-                vibrationPattern = longArrayOf(0, 300, 200, 300)
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val importance = NotificationManager.IMPORTANCE_HIGH
+                val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                    description = CHANNEL_DESC
+                    enableVibration(true)
+                    vibrationPattern = longArrayOf(0, 300, 200, 300)
+                }
+                val notificationManager: NotificationManager? =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager
+                notificationManager?.createNotificationChannel(channel)
             }
-            val notificationManager: NotificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+        } catch (_: Throwable) {
+            // Safe fallback
         }
     }
 
@@ -54,7 +58,7 @@ object OrderNotificationHelper {
 
         val title = when (status) {
             OrderStatus.PLACED -> if (lang == Language.BURMESE) "အော်ဒါ #$orderId လက်ခံရရှိပါပြီ 🎉" else "Order #$orderId Confirmed 🎉"
-            OrderStatus.PREPARING -> if (lang == Language.BURMESE) "မီးဖိုချောင်တွင် စတင်ချက်ပြုတ်နေပါပြီ 🍳" else "Kitchen is Cooking your food 🍳"
+            OrderStatus.PREPARING -> if (lang == Language.BURMESE) "အော်ဒါ ပြင်ဆင်နေပါပြီ 🍳" else "Order Preparing 🍳"
             OrderStatus.OUT_FOR_DELIVERY -> if (lang == Language.BURMESE) "ပို့ဆောင်သူ ထွက်ခွာလာပါပြီ 🛵" else "Rider is on the way 🛵"
             OrderStatus.DELIVERED -> if (lang == Language.BURMESE) "အစားအစာ ရောက်ရှိပါပြီ! စားသုံးပါ 😋" else "Food Delivered! Enjoy your meal 😋"
             OrderStatus.CANCELLED -> if (lang == Language.BURMESE) "အော်ဒါ #$orderId ပယ်ဖျက်ပြီးပါပြီ" else "Order #$orderId Cancelled"
@@ -85,7 +89,9 @@ object OrderNotificationHelper {
         orderId: String,
         amountMMK: Int,
         lang: Language,
-        remainingMinutes: Int
+        remainingMinutes: Int,
+        accountHolder: String = "",
+        contactPhone: String = ""
     ) {
         createNotificationChannel(context)
 
@@ -109,10 +115,12 @@ object OrderNotificationHelper {
         }
 
         val amountStr = if (lang == Language.BURMESE) "$amountMMK ကျပ်" else "$amountMMK MMK"
+        val holderText = if (accountHolder.isNotBlank()) accountHolder else (if (lang == Language.BURMESE) "ဒေါ်ပွင့်စံ" else "Daw Pwint San")
+        val phoneText = if (contactPhone.isNotBlank()) " - $contactPhone" else ""
         val contentText = if (lang == Language.BURMESE) {
-            "အော်ဒါ #$orderId အတွက် KBZPay ဖြင့် $amountStr ကို လွှဲပေးပါရန်။ အကောင့်: ဒေါ်ပွင့်စံ (09-789456123)"
+            "အော်ဒါ #$orderId အတွက် KBZPay ဖြင့် $amountStr ကို လွှဲပေးပါရန်။ အကောင့်: $holderText$phoneText"
         } else {
-            "Please complete your KBZPay payment of $amountStr for Order #$orderId. Acc: Daw Pwint San (09-789456123)"
+            "Please complete your KBZPay payment of $amountStr for Order #$orderId. Acc: $holderText$phoneText"
         }
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
