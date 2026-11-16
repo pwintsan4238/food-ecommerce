@@ -62,6 +62,9 @@ interface OrderDao {
     @Query("SELECT * FROM products ORDER BY nameEn ASC")
     fun getAllProducts(): Flow<List<ProductEntity>>
 
+    @Query("SELECT id FROM products")
+    suspend fun getAllProductIds(): List<String>
+
     @Query("SELECT COUNT(*) FROM products")
     suspend fun getProductCount(): Int
 
@@ -99,6 +102,9 @@ interface OrderDao {
     // Categories
     @Query("SELECT * FROM categories ORDER BY sortOrder ASC, nameEn ASC")
     fun getAllCategories(): Flow<List<CategoryEntity>>
+
+    @Query("SELECT id FROM categories")
+    suspend fun getAllCategoryIds(): List<String>
 
     @Query("SELECT COUNT(*) FROM categories")
     suspend fun getCategoryCount(): Int

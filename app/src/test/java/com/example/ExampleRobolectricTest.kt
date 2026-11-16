@@ -421,6 +421,7 @@ class ExampleRobolectricTest {
       override suspend fun saveUserProfile(profile: UserProfileEntity) {}
       override suspend fun clearUserProfile() {}
       override fun getAllProducts(): Flow<List<com.example.data.ProductEntity>> = flowOf(emptyList())
+      override suspend fun getAllProductIds(): List<String> = emptyList()
       override suspend fun getProductCount(): Int = 0
       override suspend fun insertProduct(product: com.example.data.ProductEntity) {}
       override suspend fun insertProducts(products: List<com.example.data.ProductEntity>) {}
@@ -433,6 +434,7 @@ class ExampleRobolectricTest {
       override suspend fun getBusinessSettingsCount(): Int = 0
       override suspend fun saveBusinessSettings(settings: com.example.data.BusinessSettingsEntity) {}
       override fun getAllCategories(): Flow<List<com.example.data.CategoryEntity>> = flowOf(emptyList())
+      override suspend fun getAllCategoryIds(): List<String> = emptyList()
       override suspend fun getCategoryCount(): Int = 0
       override suspend fun insertCategory(category: com.example.data.CategoryEntity) {}
       override suspend fun insertCategories(categories: List<com.example.data.CategoryEntity>) {}

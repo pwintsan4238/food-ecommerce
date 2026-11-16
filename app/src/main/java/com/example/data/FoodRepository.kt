@@ -81,73 +81,88 @@ class FoodRepository(private val orderDao: OrderDao) {
         }
 
         // Default Categories initialization
-        if (orderDao.getCategoryCount() == 0) {
-            val defaultCategories = listOf(
-                CategoryEntity(
-                    id = "FISH",
-                    nameEn = "Fish & Fillets",
-                    nameMy = "ငါးမျိုးစုံ",
-                    iconEmoji = "🐟",
-                    descriptionEn = "Hilsa, seabass, pomfret, and red snapper fresh from Rakhine waters.",
-                    descriptionMy = "ငါးသလောက်၊ ကကတစ်၊ ငါးမုတ်နှင့် ငါးပါးနီ လတ်လတ်ဆတ်ဆတ်များ။",
-                    sortOrder = 1
-                ),
-                CategoryEntity(
-                    id = "SHRIMP",
-                    nameEn = "Prawns & Shrimps",
-                    nameMy = "ပုစွန်မျိုးစုံ",
-                    iconEmoji = "🦐",
-                    descriptionEn = "Jumbo Andaman tiger prawns, freshwater giant prawns, and white prawns.",
-                    descriptionMy = "ကျားပုစွန်၊ ရေချိုပုစွန်ထုပ်ကြီးနှင့် ပုစွန်ဖြူများ။",
-                    sortOrder = 2
-                ),
-                CategoryEntity(
-                    id = "CRAB",
-                    nameEn = "Mud & Sea Crabs",
-                    nameMy = "ဂဏန်းမျိုးစုံ",
-                    iconEmoji = "🦀",
-                    descriptionEn = "Live meaty mud crabs and natural egg crabs tied with sea grass.",
-                    descriptionMy = "အသားဂဏန်း၊ ဥဂဏန်း လတ်လတ်ဆတ်ဆတ်များ။",
-                    sortOrder = 3
-                ),
-                CategoryEntity(
-                    id = "LOBSTER",
-                    nameEn = "Lobsters",
-                    nameMy = "ကျောက်ပုစွန်",
-                    iconEmoji = "🦞",
-                    descriptionEn = "Deep-sea rock lobsters and painted spiny lobsters packed on ice.",
-                    descriptionMy = "ပင်လယ်နက်ထွက် ကျောက်ပုစွန် အဆင့်မြင့် ပင်လယ်စာများ။",
-                    sortOrder = 4
-                ),
-                CategoryEntity(
-                    id = "SQUID",
-                    nameEn = "Squids & Calamari",
-                    nameMy = "ပြည်ကြီးငါး",
-                    iconEmoji = "🦑",
-                    descriptionEn = "Thick tender coastal squids, cleaned and ready for BBQ grill or curry.",
-                    descriptionMy = "ကင်ရန် သို့မဟုတ် ဟင်းချက်ရန် သန့်စင်ပြီး ပြည်ကြီးငါးများ။",
-                    sortOrder = 5
-                ),
-                CategoryEntity(
-                    id = "OCTOPUS",
-                    nameEn = "Fresh Octopus",
-                    nameMy = "ရေဘဝဲ",
-                    iconEmoji = "🐙",
-                    descriptionEn = "Fresh small and baby octopuses ideal for spicy hotpot or garlic stir-fry.",
-                    descriptionMy = "ဟော့ပေါ့နှင့် အစပ်ကြော်အတွက် အထူးသင့်လျော်သော ရေဘဝဲများ။",
-                    sortOrder = 6
-                ),
-                CategoryEntity(
-                    id = "SHELLFISH",
-                    nameEn = "Clams, Oysters & Mussels",
-                    nameMy = "ခရု၊ ကမာ၊ ယောက်သွား",
-                    iconEmoji = "🦪",
-                    descriptionEn = "Fresh coastal rock oysters, blood clams, and green mussels.",
-                    descriptionMy = "ကမ်းရိုးတန်းထွက် ကမာ၊ သွေးခရုနှင့် ယောက်သွားများ။",
-                    sortOrder = 7
-                )
+        val defaultCategories = listOf(
+            CategoryEntity(
+                id = "FISH",
+                nameEn = "Fish & Fillets",
+                nameMy = "ငါးမျိုးစုံနှင့် ငါးအသားလွှာ",
+                iconEmoji = "🐟",
+                descriptionEn = "Rakhine Hilsa with roe, seabass, pomfret, featherback paste, and fresh river murrel.",
+                descriptionMy = "ရခိုင်ငါးသလောက်ဥပါ၊ ကကတစ်၊ ငါးမုတ်၊ ငါးဖယ်ခြစ်သားနှင့် ငါးရံ့ လတ်လတ်ဆတ်ဆတ်များ။",
+                sortOrder = 1
+            ),
+            CategoryEntity(
+                id = "SHRIMP",
+                nameEn = "Prawns & Shrimps",
+                nameMy = "ပုစွန်မျိုးစုံ",
+                iconEmoji = "🦐",
+                descriptionEn = "Jumbo Andaman tiger prawns, freshwater giant prawns, and white prawns.",
+                descriptionMy = "ကျားပုစွန်၊ ရေချိုပုစွန်ထုပ်ကြီးနှင့် ပုစွန်ဖြူများ။",
+                sortOrder = 2
+            ),
+            CategoryEntity(
+                id = "CRAB",
+                nameEn = "Rakhine Crabs & Sea Crabs",
+                nameMy = "ရခိုင်ဂဏန်းနှင့် ကဏန်းမျိုးစုံ",
+                iconEmoji = "🦀",
+                descriptionEn = "Rakhine mud crabs, soft-shell crabs, flower crabs, and egg crabs tied with sea grass.",
+                descriptionMy = "ရခိုင်ပင်လယ်ကဏန်းမကြီး၊ ကဏန်းပျော့၊ ပန်းဂဏန်းနှင့် ဥဂဏန်း လတ်လတ်ဆတ်ဆတ်များ။",
+                sortOrder = 3
+            ),
+            CategoryEntity(
+                id = "LOBSTER",
+                nameEn = "Lobsters",
+                nameMy = "ကျောက်ပုစွန်",
+                iconEmoji = "🦞",
+                descriptionEn = "Deep-sea rock lobsters and painted spiny lobsters packed on ice.",
+                descriptionMy = "ပင်လယ်နက်ထွက် ကျောက်ပုစွန် အဆင့်မြင့် ပင်လယ်စာများ။",
+                sortOrder = 4
+            ),
+            CategoryEntity(
+                id = "SQUID",
+                nameEn = "Squids & Calamari",
+                nameMy = "ပြည်ကြီးငါး",
+                iconEmoji = "🦑",
+                descriptionEn = "Thick tender coastal squids, cleaned and ready for BBQ grill or curry.",
+                descriptionMy = "ကင်ရန် သို့မဟုတ် ဟင်းချက်ရန် သန့်စင်ပြီး ပြည်ကြီးငါးများ။",
+                sortOrder = 5
+            ),
+            CategoryEntity(
+                id = "OCTOPUS",
+                nameEn = "Fresh Octopus",
+                nameMy = "ရေဘဝဲ",
+                iconEmoji = "🐙",
+                descriptionEn = "Fresh small and baby octopuses ideal for spicy hotpot or garlic stir-fry.",
+                descriptionMy = "ဟော့ပေါ့နှင့် အစပ်ကြော်အတွက် အထူးသင့်လျော်သော ရေဘဝဲများ။",
+                sortOrder = 6
+            ),
+            CategoryEntity(
+                id = "SHELLFISH",
+                nameEn = "Clams, Oysters & Mussels",
+                nameMy = "ခရု၊ ကမာ၊ ယောက်သွား",
+                iconEmoji = "🦪",
+                descriptionEn = "Fresh coastal rock oysters, blood clams, and green mussels.",
+                descriptionMy = "ကမ်းရိုးတန်းထွက် ကမာ၊ သွေးခရုနှင့် ယောက်သွားများ။",
+                sortOrder = 7
+            ),
+            CategoryEntity(
+                id = "FROG",
+                nameEn = "Fresh Frogs & Frog Meat",
+                nameMy = "လတ်ဆတ် ဖားသားနှင့် ဖားပေါင်သား",
+                iconEmoji = "🐸",
+                descriptionEn = "Cleaned paddy field frogs, tender skinless frog legs, and spicy marinated frog meat.",
+                descriptionMy = "သန့်စင်ပြီး လယ်ဖားသား၊ ဖားပေါင်သားနှင့် ရခိုင်စတိုင် အစပ်နှပ်ပြီးသားများ။",
+                sortOrder = 8
             )
+        )
+        if (orderDao.getCategoryCount() == 0) {
             orderDao.insertCategories(defaultCategories)
+        } else {
+            val existingCatIds = orderDao.getAllCategoryIds()
+            val missingCats = defaultCategories.filter { it.id !in existingCatIds }
+            if (missingCats.isNotEmpty()) {
+                orderDao.insertCategories(missingCats)
+            }
         }
 
         // Default Brands initialization
@@ -197,9 +212,28 @@ class FoodRepository(private val orderDao: OrderDao) {
             orderDao.insertBrands(defaultBrands)
         }
 
-        if (orderDao.getProductCount() == 0) {
-            val productEntities = menuItems.map { ProductEntity.fromFoodItem(it) }
+        val productEntities = menuItems.map { ProductEntity.fromFoodItem(it) }
+        val existingProductIds = orderDao.getAllProductIds()
+        if (existingProductIds.isEmpty()) {
             orderDao.insertProducts(productEntities)
+        } else {
+            val missingProducts = productEntities.filter { it.id !in existingProductIds }
+            if (missingProducts.isNotEmpty()) {
+                orderDao.insertProducts(missingProducts)
+            }
+            // Update key products to ensure enhanced bilingual names are reflected
+            val keyProductsToSync = listOf(
+                "seafood_mud_crab_live",
+                "seafood_soft_shell_crab",
+                "seafood_pure_crab_meat",
+                "seafood_barramundi_whole",
+                "seafood_featherback_paste",
+                "seafood_marinated_seabass_bbq"
+            )
+            val toUpdate = productEntities.filter { it.id in keyProductsToSync && it.id in existingProductIds }
+            if (toUpdate.isNotEmpty()) {
+                orderDao.insertProducts(toUpdate)
+            }
         }
         if (orderDao.getUserAccountCount() == 0) {
             val defaultAccounts = listOf(
@@ -314,8 +348,8 @@ class FoodRepository(private val orderDao: OrderDao) {
         // 1. 🐟 ငါး (Fish)
         FoodItem(
             id = "seafood_barramundi_whole",
-            nameEn = "Fresh Sea Barramundi (Cleaned & Scaled)",
-            nameMy = "ငါးကကတစ် အကောင်လိုက် (သန့်စင်ပြီး)",
+            nameEn = "Fresh Sea Barramundi / Seabass (Cleaned & Scaled)",
+            nameMy = "ရခိုင် ငါးကကတစ် အကောင်လိုက် (သန့်စင်ပြီး)",
             descriptionEn = "Fresh coastal barramundi, gutted, descaled, and prepped ready to steam with lime or fry crispy.",
             descriptionMy = "ရခိုင်ကမ်းရိုးတန်းထွက် လတ်ဆတ်သော ငါးကကတစ်ကြီးများကို အကြေးခွါ ကလီစာထုတ် သန့်စင်ပြီး ချက်ရန်အသင့် ပြင်ဆင်ပေးထားပါသည်။",
             priceMMK = 35000,
@@ -330,6 +364,27 @@ class FoodRepository(private val orderDao: OrderDao) {
             isSpicy = false,
             iconEmoji = "🐟",
             imageUrl = "https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80",
+            availableAddOns = commonSeafoodAddOns
+        ),
+        FoodItem(
+            id = "seafood_rakhine_hilsa_roe",
+            nameEn = "Fresh Rakhine Hilsa Fish with Roe (Whole Cleaned)",
+            nameMy = "ရခိုင် ငါးသလောက်ဥပါ အကောင်လိုက် (လတ်လတ်ဆတ်ဆတ်)",
+            descriptionEn = "Prized wild Rakhine coastal Hilsa fish bursting with rich natural golden roe. Cleaned, scaled, and ready for traditional Hilsa curry, steaming, or deep frying.",
+            descriptionMy = "ရခိုင်ကမ်းလွန်ထွက် ငါးသလောက်ဥပါ အကောင်လိုက်။ ငါးဥအဆီတောင့်တောင့်များ ပါဝင်ပြီး ရခိုင်ငါးသလောက်ချဉ်ဆီပြန်၊ ပေါင်းဟင်းနှင့် အကြွပ်ကြော်ရန် အကောင်းဆုံး။",
+            priceMMK = 65000,
+            originalPriceMMK = 72000,
+            unitEn = "per 1.2 kg",
+            unitMy = "၁.၂ ကီလို",
+            category = FoodCategory.FISH,
+            prepStyle = PrepStyle.READY_TO_COOK,
+            occasion = DiningOccasion.PREMIUM,
+            rating = 5.0,
+            prepTimeMin = 20,
+            isPopular = true,
+            isPremium = true,
+            iconEmoji = "🐟",
+            imageUrl = "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
             availableAddOns = commonSeafoodAddOns
         ),
         FoodItem(
@@ -372,7 +427,7 @@ class FoodRepository(private val orderDao: OrderDao) {
         ),
         FoodItem(
             id = "seafood_featherback_paste",
-            nameEn = "Featherback Fish Paste (Ready to Cook)",
+            nameEn = "Rakhine Featherback Fish Paste (Ready to Cook)",
             nameMy = "ရခိုင်ငါးဖယ်ခြစ်သား စစ်စစ် (ဟင်းချက်/ကြော်ရန်)",
             descriptionEn = "100% natural bouncy featherback fish paste pounded with garlic and sea salt. Ready to shape into bouncy balls or patties.",
             descriptionMy = "ရခိုင်ငါးဖယ်စစ်စစ် ကစီလုံးဝမရောဘဲ နူးညံ့စေးပိုင်စွာ ခြစ်ထားသော ငါးဖယ်လုံး၊ ငါးဖယ်ကြော်နှင့် ဟင်းချက်ရန် အဆင်သင့်။",
@@ -389,9 +444,27 @@ class FoodRepository(private val orderDao: OrderDao) {
             availableAddOns = commonSeafoodAddOns
         ),
         FoodItem(
+            id = "seafood_snakehead_fillet",
+            nameEn = "Freshwater Snakehead Fish Fillet (Boneless)",
+            nameMy = "မြစ်ထွက် ငါးရံ့အသားလွှာ (အရိုးမပါ သန့်စင်ပြီး)",
+            descriptionEn = "Cleaned and sliced fresh snakehead murrel fillets. Perfect for nourishing fish soup, Mohinga, or hotpot.",
+            descriptionMy = "မြစ်ရေချိုထွက် ငါးရံ့လတ်လတ်ဆတ်ဆတ် အရိုးနွှင်ထားသော အသားလွှာ။ ဟော့ပေါ့၊ ငါးရံ့ဟင်းနှင့် ငါးရံ့ခြောက်ဖုတ်ရန် အသင့်သုံး။",
+            priceMMK = 32000,
+            unitEn = "per 600 g",
+            unitMy = "၆၀၀ ဂရမ်",
+            category = FoodCategory.FISH,
+            prepStyle = PrepStyle.BONELESS,
+            occasion = DiningOccasion.FAMILY_DINNER,
+            rating = 4.9,
+            prepTimeMin = 12,
+            iconEmoji = "🐟",
+            imageUrl = "https://images.unsplash.com/photo-1534939561126-855b8675edd7?auto=format&fit=crop&w=800&q=80",
+            availableAddOns = commonSeafoodAddOns
+        ),
+        FoodItem(
             id = "seafood_marinated_seabass_bbq",
-            nameEn = "Marinated Whole Seabass for BBQ Grill",
-            nameMy = "ငါးကကတစ် မီးကင်အရသာနှပ်ပြီးသား",
+            nameEn = "Rakhine Marinated Whole Seabass for BBQ Grill",
+            nameMy = "ရခိုင် ငါးကကတစ် မီးကင်အရသာနှပ်ပြီးသား",
             descriptionEn = "Whole seabass slit and thoroughly rubbed with Rakhine lemongrass, kaffir lime, garlic, and chili marinade.",
             descriptionMy = "ရခိုင်ရိုးရာ စပါးလင်၊ ရှောက်ရွက်၊ ငရုတ်သီး၊ ကြက်သွန်ဖြူဆော့စ်ဖြင့် အရသာနှပ်ထားပြီး မီးသွေးဖို (သို့) Oven တွင် ချက်ချင်းကင်ရုံသာ။",
             priceMMK = 38000,
@@ -466,11 +539,11 @@ class FoodRepository(private val orderDao: OrderDao) {
             availableAddOns = commonSeafoodAddOns
         ),
 
-        // 3. 🦀 ကဏန်း (Crab)
+        // 3. 🦀 ရခိုင်ကဏန်း (Rakhine Crab)
         FoodItem(
             id = "seafood_soft_shell_crab",
             nameEn = "Rakhine Soft-Shell Crabs (Ready to Fry)",
-            nameMy = "ရခိုင်ကမ်းရိုးတန်း ကဏန်းပျော့ (ကြော်ရန်အသင့်)",
+            nameMy = "ရခိုင် ကမ်းရိုးတန်း ကဏန်းပျော့ (ကြော်ရန်အသင့်)",
             descriptionEn = "Prime molted whole crabs with delicate edible shells. Cleaned and trimmed; coat lightly in flour and flash fry.",
             descriptionMy = "အခွံတစ်ခုလုံး ဝါးစားနိုင်သော ရခိုင်ကဏန်းပျော့လတ်ဆတ်စစ်စစ်။ မုန့်နှစ်ကပ်ကြော်ရုံဖြင့် ကြွပ်ရွမွှေးကြိုင်သော အရသာကို ရရှိစေပါသည်။",
             priceMMK = 36000,
@@ -488,8 +561,8 @@ class FoodRepository(private val orderDao: OrderDao) {
         ),
         FoodItem(
             id = "seafood_mud_crab_live",
-            nameEn = "Jumbo Sea Mud Crabs (Big Claws, Cleaned)",
-            nameMy = "ပင်လယ်ကဏန်းမကြီး အကောင်လိုက် (လက်မတုပ်)",
+            nameEn = "Rakhine Jumbo Sea Mud Crabs (Big Claws, Cleaned)",
+            nameMy = "ရခိုင် ပင်လယ်ကဏန်းမကြီး အကောင်လိုက် (လက်မတုပ်၊ ဥဂဏန်း)",
             descriptionEn = "Heavyweight mud crabs bursting with sweet leg meat and golden creamy roe. Cleaned, cracked, and ready for chilli crab or steamed banquet.",
             descriptionMy = "လက်မကြီးများ အသားပြည့်တင်းပြီး ကဏန်းဥအဆီတောင့်တောင့်များ ပါဝင်သော ရခိုင်ပင်လယ်ကဏန်းမကြီးများ။ ပါတီပွဲများအတွက် ထိပ်တန်းရွေးချယ်မှု။",
             priceMMK = 55000,
@@ -505,9 +578,27 @@ class FoodRepository(private val orderDao: OrderDao) {
             availableAddOns = commonSeafoodAddOns
         ),
         FoodItem(
+            id = "seafood_rakhine_flower_crab",
+            nameEn = "Fresh Rakhine Blue Swimming Flower Crabs (Whole)",
+            nameMy = "ရခိုင် ပင်လယ်ပန်းဂဏန်း အရှင် (ချက်ရန်အသင့်)",
+            descriptionEn = "Sweet and delicate wild-caught Rakhine blue flower crabs. Perfect for spicy seafood hotpot or chili-garlic stir-fry.",
+            descriptionMy = "ရခိုင်ပင်လယ်ထွက် ပန်းဂဏန်းလတ်လတ်ဆတ်ဆတ်။ အသားချိုမြိန်ပြီး ဟော့ပေါ့၊ အစပ်ကြော်နှင့် ချဉ်စပ်ဟင်းချက်ရန် အထူးကောင်းမွန်။",
+            priceMMK = 38000,
+            unitEn = "per 1 kg (4-5 pcs)",
+            unitMy = "၁ ကီလို (၄-၅ ကောင်)",
+            category = FoodCategory.CRAB,
+            prepStyle = PrepStyle.READY_TO_COOK,
+            occasion = DiningOccasion.FAMILY_DINNER,
+            rating = 4.9,
+            prepTimeMin = 15,
+            iconEmoji = "🦀",
+            imageUrl = "https://images.unsplash.com/photo-1559737558-24523a63b0a7?auto=format&fit=crop&w=800&q=80",
+            availableAddOns = commonSeafoodAddOns
+        ),
+        FoodItem(
             id = "seafood_pure_crab_meat",
-            nameEn = "Pure Jumbo Lump Crab Meat (Boneless)",
-            nameMy = "သဘာဝ ကဏန်းသား အသားသီးသန့် (အရိုးမပါ)",
+            nameEn = "Rakhine Pure Jumbo Lump Crab Meat (Boneless)",
+            nameMy = "ရခိုင် သဘာဝ ကဏန်းသား အသားသီးသန့် (အရိုးမပါ)",
             descriptionEn = "Hand-picked pure sweet crab body and claw lump meat. 100% shell-free, ready for soups, fried rice, and hotpot.",
             descriptionMy = "ကဏန်းအခွံလုံးဝမပါဘဲ အသားသီးသန့် လက်ဖြင့်သန့်စင်ခြွေယူထားသော ကဏန်းသားအိအိ။ ဟော့ပေါ့၊ စွပ်ပြုတ်နှင့် ကဏန်းထမင်းကြော်အတွက် အထူးသင့်တော်။",
             priceMMK = 48000,
@@ -771,6 +862,64 @@ class FoodRepository(private val orderDao: OrderDao) {
             isPremium = true,
             iconEmoji = "🦪",
             imageUrl = "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?auto=format&fit=crop&w=800&q=80",
+            availableAddOns = commonSeafoodAddOns
+        ),
+
+        // 8. 🐸 ဖားသား (Frogs & Frog Meat)
+        FoodItem(
+            id = "seafood_field_frog_cleaned",
+            nameEn = "Fresh Paddy Field Frog Meat (Cleaned & Whole)",
+            nameMy = "လယ်ဖားသား အကောင်လိုက် သန့်စင်ပြီး (ချက်ရန်အသင့်)",
+            descriptionEn = "Tender, wild-caught fresh paddy field frogs. Completely skinned, gutted, and washed with sea salt. Ready for spicy Rakhine dry curry or golden fry.",
+            descriptionMy = "သဘာဝလယ်ကွင်းထွက် လတ်ဆတ်သော လယ်ဖားသားများကို အရေခွါ၊ ကလီစာထုတ်၊ ဆားဖြင့်ဆေးကြော သန့်စင်ပြီး ရခိုင်ဖားသားအစပ်ကြော်နှင့် ဟင်းချက်ရန် အသင့်။",
+            priceMMK = 22000,
+            unitEn = "per 500 g",
+            unitMy = "၅၀၀ ဂရမ်",
+            category = FoodCategory.FROG,
+            prepStyle = PrepStyle.READY_TO_COOK,
+            occasion = DiningOccasion.FAMILY_DINNER,
+            rating = 4.8,
+            prepTimeMin = 15,
+            isPopular = true,
+            iconEmoji = "🐸",
+            imageUrl = "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+            availableAddOns = commonSeafoodAddOns
+        ),
+        FoodItem(
+            id = "seafood_frog_legs",
+            nameEn = "Cleaned Tender Frog Legs (Skinless Thighs)",
+            nameMy = "ဖားပေါင်သား သန့်စင်ပြီး (အသားသီးသန့်)",
+            descriptionEn = "Premium plump frog drumsticks and thighs, 100% skinless. Extremely tender and juicy, ideal for crisp batter frying or garlic butter sauté.",
+            descriptionMy = "အသားများပြီး နူးညံ့သော ဖားပေါင်သားသီးသန့်ကို သန့်စင်ထားပါသည်။ မုန့်နှစ်ကြော်၊ ထောပတ်ကြက်သွန်ဖြူဆော့စ်နှင့် ကြော်ချက်စားရန် ထိပ်တန်းရွေးချယ်မှု။",
+            priceMMK = 28000,
+            unitEn = "per 500 g",
+            unitMy = "၅၀၀ ဂရမ်",
+            category = FoodCategory.FROG,
+            prepStyle = PrepStyle.BONELESS,
+            occasion = DiningOccasion.PREMIUM,
+            rating = 4.9,
+            prepTimeMin = 10,
+            iconEmoji = "🐸",
+            imageUrl = "https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?auto=format&fit=crop&w=800&q=80",
+            availableAddOns = commonSeafoodAddOns
+        ),
+        FoodItem(
+            id = "seafood_rakhine_marinated_frog",
+            nameEn = "Rakhine Spicy Marinated Frog Meat (Ready to Fry)",
+            nameMy = "ရခိုင်စတိုင် ဖားသား အစပ်နှပ်ပြီးသား (ကြော်/ချက်ရန်)",
+            descriptionEn = "Field frog meat steeped in traditional Rakhine marinade: lemongrass, crushed green chilies, shallots, and wild coriander. Flash fry or wok-toss.",
+            descriptionMy = "ရခိုင်ရိုးရာ စပါးလင်၊ တောငရုတ်သီးစိမ်း၊ ကြက်သွန်နီနှင့် နံနံပင်တို့ဖြင့် မွှေးကြိုင်စပ်စပ် အရသာနှပ်ထားသော ဖားသားကြော် အဆင်သင့်ထုပ်။",
+            priceMMK = 25000,
+            unitEn = "per 1 pack (400 g)",
+            unitMy = "၁ ထုပ် (၄၀၀ ဂရမ်)",
+            category = FoodCategory.FROG,
+            prepStyle = PrepStyle.MARINATED,
+            occasion = DiningOccasion.PARTY_EVENT,
+            rating = 4.9,
+            prepTimeMin = 12,
+            isSpicy = true,
+            iconEmoji = "🐸",
+            imageUrl = "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80",
             availableAddOns = commonSeafoodAddOns
         )
     )

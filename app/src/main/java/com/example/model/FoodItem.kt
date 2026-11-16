@@ -8,17 +8,19 @@ enum class FoodCategory(val id: String, val iconEmoji: String) {
     LOBSTER("lobster", "🦞"),
     SQUID("squid", "🦑"),
     OCTOPUS("octopus", "🐙"),
-    SHELLFISH("shellfish", "🦪");
+    SHELLFISH("shellfish", "🦪"),
+    FROG("frog", "🐸");
 
     fun displayName(lang: Language): String = when (this) {
         ALL -> if (lang == Language.BURMESE) "အားလုံး" else "All"
-        FISH -> if (lang == Language.BURMESE) "ငါး" else "Fish"
-        SHRIMP -> if (lang == Language.BURMESE) "ပုစွန်" else "Shrimp"
-        CRAB -> if (lang == Language.BURMESE) "ကဏန်း" else "Crab"
-        LOBSTER -> if (lang == Language.BURMESE) "ပုစွန်ထုပ်" else "Lobster"
+        FISH -> if (lang == Language.BURMESE) "ငါးမျိုးစုံ" else "Fish"
+        SHRIMP -> if (lang == Language.BURMESE) "ပုစွန်မျိုးစုံ" else "Shrimp"
+        CRAB -> if (lang == Language.BURMESE) "ရခိုင်ဂဏန်း / ကဏန်း" else "Rakhine Crabs"
+        LOBSTER -> if (lang == Language.BURMESE) "ကျောက်ပုစွန်" else "Lobster"
         SQUID -> if (lang == Language.BURMESE) "ပြည်ကြီးငါး" else "Squid"
         OCTOPUS -> if (lang == Language.BURMESE) "ရေဘဝဲ" else "Octopus"
-        SHELLFISH -> if (lang == Language.BURMESE) "အခွံပါပင်လယ်စာ" else "Shellfish"
+        SHELLFISH -> if (lang == Language.BURMESE) "ခရု၊ ကမာ၊ ယောက်သွား" else "Shellfish"
+        FROG -> if (lang == Language.BURMESE) "ဖားသား" else "Frogs"
     }
 
     fun title(lang: Language): String = displayName(lang)
